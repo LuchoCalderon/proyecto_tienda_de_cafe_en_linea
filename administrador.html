@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café en Línea - Panel de Administración</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+  body {
+    background-color: #f8f9fa;
+  }
+  
+  .sidebar {
+    background-color: var(--dark-brown);
+    color: white;
+    min-height: 100vh;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 250px;
+    z-index: 100;
+    transition: all 0.3s;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  }
+  
+  .sidebar-header {
+    padding: 20px 15px;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+  }
+  
+  .sidebar-menu {
+    padding: 15px 0;
+  }
+  
+  .sidebar-menu a {
+    color: rgba(255,255,255,0.8);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    transition: all 0.3s;
+  }
+  
+  .sidebar-menu a:hover, .sidebar-menu a.active {
+    color: white;
+    background-color: rgba(255,255,255,0.1);
+  }
+  
+  .sidebar-menu i {
+    margin-right: 10px;
+    width: 20px;
+    text-align: center;
+  }
+  
+  .sidebar-menu .divider {
+    height: 1px;
+    background-color: rgba(255,255,255,0.1);
+    margin: 10px 15px;
+  }
+  
+  .main-content {
+    margin-left: 250px;
+    padding: 20px;
+    transition: all 0.3s;
+  }
+  
+  .navbar {
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.04);
+  }
+  
+  .stat-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+  }
+  
+  .stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+  }
+  
+  .chart-container {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  }
+  
+  .recent-activity {
+    background-color: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+  }
+  
+  .activity-item {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+  }
+  
+  .activity-item:last-child {
+    border-bottom: none;
+  }
+  
+  .activity-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+  }
+  
+  .toggle-sidebar {
+    display: none;
+  }
+  
+  .notification-badge {
+    position: absolute;
+    top: -5px;
+    right: -5px;
+    font-size: 0.6rem;
+    padding: 0.2rem 0.4rem;
+  }
+  
+  @media (max-width: 992px) {
+    .sidebar {
+      margin-left: -250px;
+    }
+    
+    .sidebar.active {
+      margin-left: 0;
+    }
+    
+    .main-content {
+      margin-left: 0;
+    }
+    
+    .main-content.active {
+      margin-left: 250px;
+    }
+    
+    .toggle-sidebar {
+      display: block;
+    }
+  }
+</style>
+</head>
+<body>
+<!-- Sidebar -->
+<nav class="sidebar">
+  <div class="sidebar-header">
+    <h5 class="mb-0">Café en Línea</h5>
+    <small>Panel de Administración</small>
+  </div>
+  
+  <div class="sidebar-menu">
+    <a href="admin-dashboard.html" class="active">
+      <i class="bi bi-speedometer2"></i> Dashboard
+    </a>
+    <a href="admin-products.html">
+      <i class="bi bi-box-seam"></i> Productos
+    </a>
+    <a href="admin-categories.html">
+      <i class="bi bi-tags"></i> Categorías
+    </a>
+    <a href="admin-orders.html">
+      <i class="bi bi-bag"></i> Pedidos
+    </a>
+    <a href="admin-customers.html">
+      <i class="bi bi-people"></i> Clientes
+    </a>
+    <a href="admin-subscriptions.html">
+      <i class="bi bi-calendar-check"></i> Suscripciones
+    </a>
+    <a href="admin-content.html">
+      <i class="bi bi-file-earmark-text"></i> Contenido
+    </a>
+    <a href="admin-marketing.html">
+      <i class="bi bi-megaphone"></i> Marketing
+    </a>
+    
+    <div class="divider"></div>
+    
+    <a href="admin-reports.html">
+      <i class="bi bi-graph-up"></i> Reportes
+    </a>
+    <a href="admin-settings.html">
+      <i class="bi bi-gear"></i> Configuración
+    </a>
+    
+    <div class="divider"></div>
+    
+    <a href="login.html">
+      <i class="bi bi-box-arrow-left"></i> Cerrar Sesión
+    </a>
+  </div>
+</nav>
+
+<!-- Main Content -->
+<div class="main-content">
+  <!-- Top Navbar -->
+  <nav class="navbar navbar-expand-lg navbar-light mb-4">
+    <div class="container-fluid">
+      <button class="btn btn-outline-secondary toggle-sidebar me-2">
+        <i class="bi bi-list"></i>
+      </button>
+      
+      <span class="navbar-brand mb-0 h1">Dashboard</span>
+      
+      <div class="ms-auto d-flex align-items-center">
+        <div class="dropdown me-3">
+          <button class="btn btn-outline-secondary position-relative" type="button" id="notificationsDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-bell"></i>
+            <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger notification-badge">
+              3
+            </span>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="notificationsDropdown">
+            <li><h6 class="dropdown-header">Notificaciones</h6></li>
+            <li><a class="dropdown-item" href="#">Nuevo pedido #1234</a></li>
+            <li><a class="dropdown-item" href="#">Producto agotado: Café Colombiano</a></li>
+            <li><a class="dropdown-item" href="#">5 nuevas reseñas pendientes</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-primary" href="#">Ver todas</a></li>
+          </ul>
+        </div>
+        
+        <div class="dropdown">
+          <button class="btn d-flex align-items-center" type="button" id="userDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+            <img src="" class="rounded-circle me-2" width="30" height="30" alt="User">
+            <span>Admin</span>
+            <i class="bi bi-chevron-down ms-2 small"></i>
+          </button>
+          <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="#">Mi Perfil</a></li>
+            <li><a class="dropdown-item" href="#">Configuración</a></li>
+            <li><hr class="dropdown-divider"></li>
+            <li><a class="dropdown-item text-danger" href="login.html">Cerrar Sesión</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </nav>
+  
+  <!-- Dashboard Content -->
+  <div class="container-fluid">
+    <!-- Welcome Message -->
+    <div class="row mb-4">
+      <div class="col-12">
+        <div class="card border-0 bg-primary text-white">
+          <div class="card-body p-4">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <h4 class="mb-1">¡Bienvenido de nuevo, Admin!</h4>
+                <p class="mb-0">Aquí tienes un resumen de tu tienda. Hoy es: <span id="currentDate">10 de octubre, 2023</span></p>
+              </div>
+              <button class="btn btn-light">Ver reportes <i class="bi bi-arrow-right"></i></button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Stats Cards -->
+    <div class="row g-4 mb-4">
+      <div class="col-md-3">
+        <div class="card stat-card border-0">
+          <div class="card-body">
+            <div class="stat-icon bg-primary-subtle text-primary">
+              <i class="bi bi-currency-dollar fs-4"></i>
+            </div>
+            <h6 class="text-muted">Ventas del día</h6>
+            <h3 class="mb-0">$850.000</h3>
+            <div class="mt-2 text-success small">
+              <i class="bi bi-arrow-up"></i> 12% comparado con ayer
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="card stat-card border-0">
+          <div class="card-body">
+            <div class="stat-icon bg-success-subtle text-success">
+              <i class="bi bi-bag-check fs-4"></i>
+            </div>
+            <h6 class="text-muted">Pedidos del día</h6>
+            <h3 class="mb-0">24</h3>
+            <div class="mt-2 text-success small">
+              <i class="bi bi-arrow-up"></i> 8% comparado con ayer
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="card stat-card border-0">
+          <div class="card-body">
+            <div class="stat-icon bg-warning-subtle text-warning">
+              <i class="bi bi-people fs-4"></i>
+            </div>
+            <h6 class="text-muted">Nuevos usuarios</h6>
+            <h3 class="mb-0">12</h3>
+            <div class="mt-2 text-success small">
+              <i class="bi bi-arrow-up"></i> 25% comparado con ayer
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3">
+        <div class="card stat-card border-0">
+          <div class="card-body">
+            <div class="stat-icon bg-danger-subtle text-danger">
+              <i class="bi bi-eye fs-4"></i>
+            </div>
+            <h6 class="text-muted">Visitas a la tienda</h6>
+            <h3 class="mb-0">1,280</h3>
+            <div class="mt-2 text-danger small">
+              <i class="bi bi-arrow-down"></i> 5% comparado con ayer
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Charts Row -->
+    <div class="row g-4 mb-4">
+      <div class="col-lg-8">
+        <div class="chart-container">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="mb-0">Ventas de los últimos 7 días</h5>
+            <div class="btn-group">
+              <button type="button" class="btn btn-sm btn-outline-secondary">Día</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary active">Semana</button>
+              <button type="button" class="btn btn-sm btn-outline-secondary">Mes</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-4">
+        <div class="chart-container">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="mb-0">Productos más vendidos</h5>
+            <button class="btn btn-sm btn-outline-secondary">Ver detalle</button>
+          </div>
+          <canvas id="productsChart" height="1"></canvas>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Recent Orders and Activity -->
+    <div class="row g-4">
+      <div class="col-lg-8">
+        <div class="card border-0">
+          <div class="card-header bg-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">Pedidos recientes</h5>
+            <a href="admin-orders.html" class="btn btn-sm btn-primary">Ver todos</a>
+          </div>
+          <div class="card-body p-0">
+            <div class="table-responsive">
+              <table class="table table-hover">
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Cliente</th>
+                    <th>Estado</th>
+                    <th>Total</th>
+                    <th>Fecha</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>#ORD-2025-1089</td>
+                    <td>Carlos Rodríguez</td>
+                    <td><span class="badge bg-success">Entregado</span></td>
+                    <td>$83.000</td>
+                    <td>16/03/2025</td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-secondary"><i class="bi bi-eye"></i></button>
+                        <button class="btn btn-outline-secondary"><i class="bi bi-printer"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>#ORD-2025-1088</td>
+                    <td>Ana Martínez</td>
+                    <td><span class="badge bg-warning text-dark">En proceso</span></td>
+                    <td>$45.000</td>
+                    <td>15/03/2025</td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-secondary"><i class="bi bi-eye"></i></button>
+                        <button class="btn btn-outline-secondary"><i class="bi bi-printer"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>#ORD-2025-1087</td>
+                    <td>Juan Pérez</td>
+                    <td><span class="badge bg-info">Enviado</span></td>
+                    <td>$112.000</td>
+                    <td>23/03/2005</td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-secondary"><i class="bi bi-eye"></i></button>
+                        <button class="btn btn-outline-secondary"><i class="bi bi-printer"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>#ORD-2025-1086</td>
+                    <td>María González</td>
+                    <td><span class="badge bg-success">Entregado</span></td>
+                    <td>$67.500</td>
+                    <td>28/03/2025</td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-secondary"><i class="bi bi-eye"></i></button>
+                        <button class="btn btn-outline-secondary"><i class="bi bi-printer"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td>#ORD-2025-1085</td>
+                    <td>Pedro Sánchez</td>
+                    <td><span class="badge bg-danger">Cancelado</span></td>
+                    <td>$34.000</td>
+                    <td>1/04/2025</td>
+                    <td>
+                      <div class="btn-group btn-group-sm">
+                        <button class="btn btn-outline-secondary"><i class="bi bi-eye"></i></button>
+                        <button class="btn btn-outline-secondary"><i class="bi bi-printer"></i></button>
+                      </div>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-lg-4">
+        <div class="recent-activity">
+          <div class="d-flex justify-content-between align-items-center mb-4">
+            <h5 class="mb-0">Actividad reciente</h5>
+            <button class="btn btn-sm btn-outline-secondary">Ver todo</button>
+          </div>
+          
+          <div class="activity-item d-flex align-items-start">
+            <div class="activity-icon bg-primary-subtle text-primary">
+              <i class="bi bi-person-plus"></i>
+            </div>
+            <div>
+              <h6 class="mb-1">Nuevo usuario registrado</h6>
+              <p class="mb-0 text-muted small">Laura Gómez se ha registrado</p>
+              <small class="text-muted">Hace 5 minutos</small>
+            </div>
+          </div>
+          
+          <div class="activity-item d-flex align-items-start">
+            <div class="activity-icon bg-success-subtle text-success">
+              <i class="bi bi-bag-plus"></i>
+            </div>
+            <div>
+              <h6 class="mb-1">Nuevo pedido realizado</h6>
+              <p class="mb-0 text-muted small">Pedido #ORD-2025-1090 por $56.000</p>
+              <small class="text-muted">Hace 15 minutos</small>
+            </div>
+          </div>
+          
+          <div class="activity-item d-flex align-items-start">
+            <div class="activity-icon bg-warning-subtle text-warning">
+              <i class="bi bi-star"></i>
+            </div>
+            <div>
+              <h6 class="mb-1">Nueva reseña recibida</h6>
+              <p class="mb-0 text-muted small">Carlos Rodríguez ha dado 5 estrellas al Café Colombiano Premium</p>
+              <small class="text-muted">Hace 45 minutos</small>
+            </div>
+          </div>
+          
+          <div class="activity-item d-flex align-items-start">
+            <div class="activity-icon bg-info-subtle text-info">
+              <i class="bi bi-box-seam"></i>
+            </div>
+            <div>
+              <h6 class="mb-1">Producto actualizado</h6>
+              <p class="mb-0 text-muted small">El inventario de "Dripper de Cerámica" ha sido actualizado</p>
+              <small class="text-muted">Hace 1 hora</small>
+            </div>
+          </div>
+          
+          <div class="activity-item d-flex align-items-start">
+            <div class="activity-icon bg-danger-subtle text-danger">
+              <i class="bi bi-exclamation-circle"></i>
+            </div>
+            <div>
+              <h6 class="mb-1">Alerta de inventario</h6>
+              <p class="mb-0 text-muted small">El producto "Café Etíope Yirgacheffe" está por agotarse</p>
+              <small class="text-muted">Hace 2 horas</small>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+// Alternar barra lateral
+document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+  document.querySelector('.sidebar').classList.toggle('active');
+  document.querySelector('.main-content').classList.toggle('active');
+});
+
+// fecha actual
+const options = { year: 'numeric', month: 'long', day: 'numeric' };
+document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES', options);
+
+
+</script>
+</body>
+</html>
+

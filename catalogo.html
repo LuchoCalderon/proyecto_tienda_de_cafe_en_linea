@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café en Línea - Catálogo de Productos</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .product-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    height: 100%;
+  }
+  
+  .product-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+  }
+  
+  .product-image {
+    height: 200px;
+    object-fit: cover;
+  }
+  
+  .category-badge {
+    background-color: var(--coffee-brown);
+    color: white;
+  }
+  
+  .filter-section {
+    background-color: #f8f9fa;
+    border-radius: 10px;
+  }
+  
+  .navbar {
+    background-color: var(--dark-brown);
+  }
+  
+  .navbar-brand, .nav-link {
+    color: var(--cream);
+  }
+  
+  .nav-link:hover {
+    color: #fff;
+  }
+  
+  .search-form {
+    max-width: 400px;
+  }
+</style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="home.html">Café en Línea</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link active" href="home.html">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="catalogo.html">Catálogo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="planesSuscripcion.html">Suscripciones</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="sobreNosotros.html">Sobre Nosotros</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="contactenos.html">Contacto</a>
+        </li>
+      </ul>
+      <form class="d-flex search-form">
+        <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Search">
+        <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
+      </form>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="login.html"><i class="bi bi-person"></i> Iniciar Sesión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="carritoCompra.html"><i class="bi bi-cart"></i> Carrito (0)</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div class="container py-5">
+  <h1 class="coffee-title mb-4">Nuestros Productos</h1>
+  
+  <div class="row">
+    <!-- Filtros -->
+    <div class="col-lg-3 mb-4">
+      <div class="filter-section p-3 mb-4">
+        <h5 class="coffee-title">Categorías</h5>
+        <div class="list-group">
+          <a href="#" class="list-group-item list-group-item-action active">Todos los productos</a>
+          <a href="#" class="list-group-item list-group-item-action">Café en grano</a>
+          <a href="#" class="list-group-item list-group-item-action">Café molido</a>
+          <a href="#" class="list-group-item list-group-item-action">Bebidas</a>
+          <a href="#" class="list-group-item list-group-item-action">Accesorios</a>
+          <a href="#" class="list-group-item list-group-item-action">Máquinas</a>
+        </div>
+      </div>
+      
+      <div class="filter-section p-3 mb-4">
+        <h5 class="coffee-title">Filtrar por precio</h5>
+        <div class="mb-3">
+          <label for="priceRange" class="form-label">Hasta $50.000</label>
+          <input type="range" class="form-range" min="0" max="50000" step="1000" id="priceRange">
+        </div>
+        <div class="d-flex justify-content-between">
+          <span>$0</span>
+          <span>$50.000</span>
+        </div>
+      </div>
+      
+      <div class="filter-section p-3">
+        <h5 class="coffee-title">Origen</h5>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="colombia">
+          <label class="form-check-label" for="colombia">Colombia</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="brasil">
+          <label class="form-check-label" for="brasil">Brasil</label>
+        </div>
+        <div class="form-check">
+          <input class="form-check-input" type="checkbox" value="" id="peru">
+          <label class="form-check-label" for="peru">Perú</label>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Productos -->
+    <div class="col-lg-9">
+      <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        <!-- Producto 1 -->
+        <div class="col">
+          <div class="card product-card h-100">
+            <span class="badge category-badge position-absolute top-0 end-0 m-2">Destacado</span>
+            <a href="productos.html"><img src="images/cafepremium.png" class="card-img-top product-image" alt="Café Colombiano"></a>
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Café Colombiano Premium</h5>
+              <p class="card-text text-muted small">Café en grano</p>
+              <p class="card-text">Café de origen único con notas de chocolate y caramelo. Tostado medio.</p>
+              <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fs-5 fw-bold">$25.000</span>
+                  <button class="btn btn-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Producto 2 -->
+        <div class="col">
+          <div class="card product-card h-100">
+            <img src="images/molinillo.png" class="card-img-top product-image" alt="Molinillo de Café">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Molinillo Manual Clásico</h5>
+              <p class="card-text text-muted small">Accesorios</p>
+              <p class="card-text">Molinillo manual de acero inoxidable con mecanismo de cerámica ajustable.</p>
+              <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fs-5 fw-bold">$45.000</span>
+                  <button class="btn btn-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Producto 3 -->
+        <div class="col">
+          <div class="card product-card h-100">
+            <img src="images/capuccino.png" class="card-img-top product-image" alt="Bebidas">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Capuccino</h5>
+              <p class="card-text text-muted small">Bebidas</p>
+              <p class="card-text">Espresso intenso, leche vaporizada y una corona de espuma suave. Un clásico reconfortante..</p>
+              <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fs-5 fw-bold">$9.000</span>
+                  <button class="btn btn-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Producto 4 -->
+        <div class="col">
+          <div class="card product-card h-100">
+            <img src="images/dripper.png" class="card-img-top product-image" alt="Cafetera">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Dripper de ceramica</h5>
+              <p class="card-text text-muted small">Accesorios</p>
+              <p class="card-text">El Dripper de Cerámica asegura una extracción limpia, resaltando los matices de tu café favorito.</p>
+              <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fs-5 fw-bold">$38.000</span>
+                  <button class="btn btn-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Producto 5 -->
+        <div class="col">
+          <div class="card product-card h-100">
+            <span class="badge category-badge position-absolute top-0 end-0 m-2">Nuevo</span>
+            <img src="images/cafeMolido.png" class="card-img-top product-image" alt="Café molido">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Café Brasileño Suave </h5>
+              <p class="card-text text-muted small">Café molido</p>
+              <p class="card-text">Café de especialidad con notas florales y cítricas. Tostado ligero.</p>
+              <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fs-5 fw-bold">$28.000</span>
+                  <button class="btn btn-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Producto 6 -->
+        <div class="col">
+          <div class="card product-card h-100">
+            <img src="images/tazas.png" class="card-img-top product-image" alt="Taza de Café">
+            <div class="card-body d-flex flex-column">
+              <h5 class="card-title">Set de Tazas Artesanales</h5>
+              <p class="card-text text-muted small">Accesorios</p>
+              <p class="card-text">Juego de 3 tazas de cerámica hechas a mano con platillos a juego.</p>
+              <div class="mt-auto">
+                <div class="d-flex justify-content-between align-items-center">
+                  <span class="fs-5 fw-bold">$32.000</span>
+                  <button class="btn btn-primary"><i class="bi bi-cart-plus"></i> Añadir</button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      
+      <!-- Paginación -->
+      <nav aria-label="Navegación de páginas" class="mt-5">
+        <ul class="pagination justify-content-center">
+          <li class="page-item disabled">
+            <a class="page-link" href="#" tabindex="-1" aria-disabled="true">Anterior</a>
+          </li>
+          <li class="page-item active"><a class="page-link" href="#">1</a></li>
+          <li class="page-item"><a class="page-link" href="#">2</a></li>
+          <li class="page-item"><a class="page-link" href="#">3</a></li>
+          <li class="page-item">
+            <a class="page-link" href="#">Siguiente</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-dark text-light py-4 mt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h5>Café en Línea</h5>
+        <p>Ofreciendo la mejor experiencia de café desde 2025.</p>
+        <div class="d-flex">
+          <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-light"><i class="bi bi-twitter"></i></a>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h5>Enlaces rápidos</h5>
+        <ul class="list-unstyled">
+          <li><a href="home.html" class="text-light text-decoration-none">Inicio</a></li>
+          <li><a href="catalogo.html" class="text-light text-decoration-none">Catálogo</a></li>
+          <li><a href="sobreNosotros.html" class="text-light text-decoration-none">Sobre Nosotros</a></li>
+          <li><a href="contactenos.html" class="text-light text-decoration-none">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Contacto</h5>
+        <address class="text-light">
+          <i class="bi bi-geo-alt"></i> Calle Principal #123, Granada<br>
+          <i class="bi bi-telephone"></i> (123) 456-7890<br>
+          <i class="bi bi-envelope"></i> info@cafeenlinea.com
+        </address>
+      </div>
+    </div>
+    <hr class="my-3 bg-light">
+    <div class="text-center">
+      <small>&copy; 2025 Café en Línea. Todos los derechos reservados.</small>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

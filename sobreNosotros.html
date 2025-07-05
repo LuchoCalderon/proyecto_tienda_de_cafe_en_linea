@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café en Línea - Sobre Nosotros</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .navbar {
+    background-color: var(--dark-brown);
+  }
+  
+  .navbar-brand, .nav-link {
+    color: var(--cream);
+  }
+  
+  .nav-link:hover {
+    color: #fff;
+  }
+  
+  .search-form {
+    max-width: 400px;
+  }
+  
+  .hero-section {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/cafe.jpeg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+    margin-bottom: 60px;
+  }
+  
+  .story-image {
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+  }
+  
+  .team-member {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  
+  .team-member img {
+    width: 150px;
+    height: 150px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    transition: transform 0.3s ease;
+  }
+  
+  .team-member:hover img {
+    transform: scale(1.05);
+  }
+  
+  .value-icon {
+    width: 80px;
+    height: 80px;
+    background-color: var(--coffee-brown);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 20px;
+  }
+  
+  .testimonial-carousel .carousel-item {
+    min-height: 300px;
+  }
+  
+  .milestone-card {
+    border-radius: 10px;
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    position: relative;
+    margin-bottom: 30px;
+  }
+  
+  .milestone-card:hover {
+    transform: translateY(-10px);
+  }
+  
+  .milestone-card img {
+    height: 250px;
+    object-fit: cover;
+  }
+  
+  .milestone-card .card-img-overlay {
+    background: linear-gradient(to top, rgba(0,0,0,0.8), rgba(0,0,0,0.4), rgba(0,0,0,0));
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+  }
+  
+  .timeline {
+    position: relative;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  
+  .timeline::after {
+    content: '';
+    position: absolute;
+    width: 6px;
+    background-color: var(--coffee-brown);
+    top: 0;
+    bottom: 0;
+    left: 50%;
+    margin-left: -3px;
+  }
+  
+  .timeline-container {
+    padding: 10px 40px;
+    position: relative;
+    background-color: inherit;
+    width: 50%;
+  }
+  
+  .timeline-container::after {
+    content: '';
+    position: absolute;
+    width: 25px;
+    height: 25px;
+    right: -13px;
+    background-color: white;
+    border: 4px solid var(--coffee-brown);
+    top: 15px;
+    border-radius: 50%;
+    z-index: 1;
+  }
+  
+  .left {
+    left: 0;
+  }
+  
+  .right {
+    left: 50%;
+  }
+  
+  .left::before {
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 22px;
+    width: 0;
+    z-index: 1;
+    right: 30px;
+    border: medium solid #f8f9fa;
+    border-width: 10px 0 10px 10px;
+    border-color: transparent transparent transparent #f8f9fa;
+  }
+  
+  .right::before {
+    content: " ";
+    height: 0;
+    position: absolute;
+    top: 22px;
+    width: 0;
+    z-index: 1;
+    left: 30px;
+    border: medium solid #f8f9fa;
+    border-width: 10px 10px 10px 0;
+    border-color: transparent #f8f9fa transparent transparent;
+  }
+  
+  .right::after {
+    left: -12px;
+  }
+  
+  .timeline-content {
+    padding: 20px;
+    background-color: #f8f9fa;
+    position: relative;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  }
+  
+  @media screen and (max-width: 768px) {
+    .timeline::after {
+      left: 31px;
+    }
+    
+    .timeline-container {
+      width: 100%;
+      padding-left: 70px;
+      padding-right: 25px;
+    }
+    
+    .timeline-container::before {
+      left: 60px;
+      border: medium solid #f8f9fa;
+      border-width: 10px 10px 10px 0;
+      border-color: transparent #f8f9fa transparent transparent;
+    }
+  
+    .left::after, .right::after {
+      left: 18px;
+    }
+  
+    .right {
+      left: 0%;
+    }
+  }
+</style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="home.html">Café en Línea</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="home.html">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="catalogo.html">Catálogo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="planesSuscripcion.html">Suscripciones</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="sobreNosotros.html">Sobre Nosotros</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="contactenos.html">Contacto</a>
+        </li>
+      </ul>
+      <form class="d-flex search-form">
+        <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Search">
+        <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
+      </form>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="login.html"><i class="bi bi-person"></i> Iniciar Sesión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="carritoCompra.html"><i class="bi bi-cart"></i> Carrito (0)</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section text-center">
+  <div class="container">
+    <h1 class="display-4 fw-bold mb-4">Nuestra Historia</h1>
+    <p class="lead fw-bold mb-5">Conozca más sobre nuestra pasión por el café y cómo empezó todo.</p>
+  </div>
+</section>
+
+<!-- Nuestra Historia -->
+<section class="container mb-5">
+  <div class="row align-items-center mb-5">
+    <div class="col-md-6 mb-4 mb-md-0">
+      <h2 class="coffee-title mb-4">Los orígenes de Café en Línea</h2>
+      <p>Café en Línea nació en 2025 de la pasión de su fundador, Juan Pérez, por compartir la riqueza del café colombiano con el mundo. Tras años trabajando en las montañas cafeteras de Colombia, Juan decidió crear una marca que no solo ofreciera café de calidad excepcional, sino que también honrara las tradiciones y el arduo trabajo de los caficultores locales.</p>
+      <p>Lo que comenzó como una pequeña tienda en el centro de Granada, con apenas tres variedades de café, se ha convertido en una empresa reconocida nacionalmente por su compromiso con la calidad, la sostenibilidad y el comercio justo.</p>
+      <p>Hoy, Café en línea trabaja directamente con más de 200 familias caficultoras en diferentes regiones de Colombia, asegurando que cada grano sea cultivado, cosechado y procesado bajo los más altos estándares de calidad y respeto por el medio ambiente.</p>
+    </div>
+    <div class="col-md-6">
+      <div class="story-image">
+        <img src="images/tienda.png" alt="tienda" class="img-fluid rounded">
+      </div>
+    </div>
+  </div>
+  
+  <div class="row align-items-center mb-5">
+    <div class="col-md-6 order-md-2 mb-4 mb-md-0">
+      <h2 class="coffee-title mb-4">Nuestra misión</h2>
+      <p>En Café en Línea, nuestra misión es conectar a los amantes del café con la riqueza cultural y aromática del café colombiano de especialidad, a través de una experiencia única que honre la tradición y promueva la innovación.</p>
+      <p>Nos esforzamos por:</p>
+      <ul>
+        <li>Ofrecer café de la más alta calidad, directamente de los productores a tu taza.</li>
+        <li>Promover prácticas sostenibles y comercio justo en toda nuestra cadena de suministro.</li>
+        <li>Educar a nuestros clientes sobre el arte y la ciencia detrás de un buen café.</li>
+        <li>Apoyar el desarrollo de las comunidades cafeteras con las que trabajamos.</li>
+      </ul>
+      <p>Cada taza de Café Aroma es más que una bebida; es una historia, una tradición y un compromiso con la excelencia.</p>
+    </div>
+    <div class="col-md-6 order-md-1">
+      <div class="story-image">
+        <img src="images/plantacion.png" alt="Plantación de café" class="img-fluid rounded">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Nuestro Equipo -->
+<section class="bg-light py-5 mb-5">
+  <div class="container">
+    <h2 class="coffee-title text-center mb-5">Conozca a nuestro equipo</h2>
+    
+    <div class="row">
+      <div class="col-md-3 col-sm-6">
+        <div class="team-member">
+          <img src="https://source.unsplash.com/random/300x300?man" alt="Juan Pérez" class="img-fluid">
+          <h5>Juan Pérez</h5>
+          <p class="text-muted mb-2">Fundador & CEO</p>
+          <div class="social-icons">
+            <a href="#" class="text-muted me-2"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="text-muted me-2"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="text-muted"><i class="bi bi-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3 col-sm-6">
+        <div class="team-member">
+          <img src="https://source.unsplash.com/random/300x300?woman" alt="María González" class="img-fluid">
+          <h5>María González</h5>
+          <p class="text-muted mb-2">Directora de Operaciones</p>
+          <div class="social-icons">
+            <a href="#" class="text-muted me-2"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="text-muted me-2"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="text-muted"><i class="bi bi-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3 col-sm-6">
+        <div class="team-member">
+          <img src="https://source.unsplash.com/random/300x300?man-2" alt="Carlos Rodríguez" class="img-fluid">
+          <h5>Carlos Rodríguez</h5>
+          <p class="text-muted mb-2">Maestro Tostador</p>
+          <div class="social-icons">
+            <a href="#" class="text-muted me-2"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="text-muted me-2"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="text-muted"><i class="bi bi-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+      
+      <div class="col-md-3 col-sm-6">
+        <div class="team-member">
+          <img src="https://source.unsplash.com/random/300x300?woman-2" alt="Ana Martínez" class="img-fluid">
+          <h5>Ana Martínez</h5>
+          <p class="text-muted mb-2">Directora de Sostenibilidad</p>
+          <div class="social-icons">
+            <a href="#" class="text-muted me-2"><i class="bi bi-linkedin"></i></a>
+            <a href="#" class="text-muted me-2"><i class="bi bi-twitter"></i></a>
+            <a href="#" class="text-muted"><i class="bi bi-envelope"></i></a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Nuestros Valores -->
+<section class="container mb-5">
+  <h2 class="coffee-title text-center mb-5">Nuestros Valores</h2>
+  
+  <div class="row g-4">
+    <div class="col-md-4 text-center">
+      <div class="value-icon mx-auto">
+        <i class="bi bi-award fs-1"></i>
+      </div>
+      <h4>Calidad</h4>
+      <p>Nos comprometemos con la excelencia en cada etapa, desde la selección de los mejores granos hasta el servicio al cliente.</p>
+    </div>
+    
+    <div class="col-md-4 text-center">
+      <div class="value-icon mx-auto">
+        <i class="bi bi-tree fs-1"></i>
+      </div>
+      <h4>Sostenibilidad</h4>
+      <p>Promovemos prácticas agrícolas sostenibles y trabajamos para minimizar nuestro impacto ambiental en todas nuestras operaciones.</p>
+    </div>
+    
+    <div class="col-md-4 text-center">
+      <div class="value-icon mx-auto">
+        <i class="bi bi-people fs-1"></i>
+      </div>
+      <h4>Comunidad</h4>
+      <p>Creemos en construir relaciones duraderas con nuestros productores, empleados y clientes, basadas en el respeto y la equidad.</p>
+    </div>
+    
+    <div class="col-md-4 text-center">
+      <div class="value-icon mx-auto">
+        <i class="bi bi-lightbulb fs-1"></i>
+      </div>
+      <h4>Innovación</h4>
+      <p>Buscamos constantemente nuevas formas de mejorar nuestros productos y servicios, manteniendo vivo el espíritu de curiosidad y aprendizaje.</p>
+    </div>
+    
+    <div class="col-md-4 text-center">
+      <div class="value-icon mx-auto">
+        <i class="bi bi-currency-exchange fs-1"></i>
+      </div>
+      <h4>Comercio Justo</h4>
+      <p>Pagamos precios justos a nuestros productores y promovemos relaciones comerciales transparentes y equitativas.</p>
+    </div>
+    
+    <div class="col-md-4 text-center">
+      <div class="value-icon mx-auto">
+        <i class="bi bi-book fs-1"></i>
+      </div>
+      <h4>Educación</h4>
+      <p>Nos dedicamos a compartir conocimientos sobre el café, desde su cultivo hasta su preparación, para crear una comunidad más informada.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Nuestra Trayectoria -->
+<section class="bg-light py-5 mb-5">
+  <div class="container">
+    <h2 class="coffee-title text-center mb-5">Nuestra Trayectoria</h2>
+    
+    <div class="timeline">
+      <div class="timeline-container left">
+        <div class="timeline-content">
+          <h3>2018</h3>
+          <p>Fundación de Café Aroma con una pequeña tienda en el centro de Bogotá, ofreciendo tres variedades de café.</p>
+        </div>
+      </div>
+      <div class="timeline-container right">
+        <div class="timeline-content">
+          <h3>2019</h3>
+          <p>Expansión a una segunda ubicación y lanzamiento de nuestra primera línea de café de especialidad.</p>
+        </div>
+      </div>
+      <div class="timeline-container left">
+        <div class="timeline-content">
+          <h3>2020</h3>
+          <p>Comenzamos a trabajar directamente con productores de café en diferentes regiones de Colombia.</p>
+        </div>
+      </div>
+      <div class="timeline-container right">
+        <div class="timeline-content">
+          <h3>2021</h3>
+          <p>Inauguración de nuestra propia planta de tostado y lanzamiento de nuestro programa de suscripción.</p>
+        </div>
+      </div>
+      <div class="timeline-container left">
+        <div class="timeline-content">
+          <h3>2022</h3>
+          <p>Recibimos el reconocimiento como "Mejor Tostador del Año" en la Feria Internacional del Café.</p>
+        </div>
+      </div>
+      <div class="timeline-container right">
+        <div class="timeline-content">
+          <h3>2023</h3>
+          <p>Celebramos nuestro 10° aniversario y lanzamos nuestra tienda en línea para llegar a clientes en todo el país.</p>
+        </div>
+      </div>
+      <div class="timeline-container left">
+        <div class="timeline-content">
+          <h3>2024</h3>
+          <p>Implementación de nuestro programa de sostenibilidad y comercio justo, trabajando con más de 200 familias caficultoras.</p>
+        </div>
+      </div>
+      <div class="timeline-container right">
+        <div class="timeline-content">
+          <h3>2025</h3>
+          <p>Apertura de nuestra Escuela de Baristas y lanzamiento de nuestra aplicación móvil para mejorar la experiencia del cliente.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Testimonios -->
+<section class="container mb-5">
+  <h2 class="coffee-title text-center mb-5">Lo que dicen nuestros clientes</h2>
+  
+  <div id="testimonialCarousel" class="carousel slide testimonial-carousel" data-bs-ride="carousel">
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <div class="testimonial-quote mb-4 p-4">
+              <p class="lead">"Desde que descubrí Café Aroma, no puedo imaginar mis mañanas sin una taza de su café Colombiano Premium. La calidad y el sabor son incomparables, y me encanta saber que estoy apoyando prácticas sostenibles con cada compra."</p>
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+              <img src="images/persona2.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
+              <div class="text-start">
+                <h6 class="mb-0">Ana Martínez</h6>
+                <small class="text-muted">Cliente desde 2021</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <div class="testimonial-quote mb-4 p-4">
+              <p class="lead">"Como propietario de una cafetería, la calidad y consistencia son fundamentales. Café en línea ha sido nuestro proveedor exclusivo durante los últimos tres años, y nuestros clientes constantemente elogian el sabor único de sus diferentes mezclas."</p>
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+              <img src="images/persona1.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
+              <div class="text-start">
+                <h6 class="mb-0">Carlos Rodríguez</h6>
+                <small class="text-muted">Propietario de 'El Café Perfecto'</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="carousel-item">
+        <div class="row justify-content-center">
+          <div class="col-lg-8 text-center">
+            <div class="testimonial-quote mb-4 p-4">
+              <p class="lead">"La suscripción de Café en línea cambió mi rutina matutina. Recibir café fresco cada mes, junto con recomendaciones sobre cómo prepararlo, ha sido una experiencia maravillosa. Su servicio al cliente es excepcional."</p>
+            </div>
+            <div class="d-flex align-items-center justify-content-center">
+              <img src="images/persona4.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
+              <div class="text-start">
+                <h6 class="mb-0">Laura Sánchez</h6>
+                <small class="text-muted">Suscriptora desde 2020</small>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <button class="carousel-control-prev" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="prev">
+      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Anterior</span>
+    </button>
+    <button class="carousel-control-next" type="button" data-bs-target="#testimonialCarousel" data-bs-slide="next">
+      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span class="visually-hidden">Siguiente</span>
+    </button>
+  </div>
+</section>
+
+<!-- CTA Final -->
+<section class="bg-primary text-white py-5">
+  <div class="container text-center">
+    <h2 class="mb-4">¡Únete a nuestra comunidad de amantes del café!</h2>
+    <p class="lead mb-4">Conoce nuestros productos y forma parte de la familia Café en línea.</p>
+    <div class="d-flex justify-content-center">
+      <a href="catalogo.html" class="btn btn-light btn-lg me-3">Explorar productos</a>
+      <a href="contactenos.html" class="btn btn-outline-light btn-lg">Contáctanos</a>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-light py-4 mt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h5>Café en Línea</h5>
+        <p>Ofreciendo la mejor experiencia de café desde 2025.</p>
+        <div class="d-flex">
+          <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-light"><i class="bi bi-twitter"></i></a>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h5>Enlaces rápidos</h5>
+        <ul class="list-unstyled">
+          <li><a href="home.html" class="text-light text-decoration-none">Inicio</a></li>
+          <li><a href="catalogo.html" class="text-light text-decoration-none">Catálogo</a></li>
+          <li><a href="sobreNosotros.html" class="text-light text-decoration-none">Sobre Nosotros</a></li>
+          <li><a href="contactenos.html" class="text-light text-decoration-none">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Contacto</h5>
+        <address class="text-light">
+          <i class="bi bi-geo-alt"></i> Calle Principal #123, Granada<br>
+          <i class="bi bi-telephone"></i> (123) 456-7890<br>
+          <i class="bi bi-envelope"></i> info@cafeenlinea.com
+        </address>
+      </div>
+    </div>
+    <hr class="my-3 bg-light">
+    <div class="text-center">
+      <small>&copy; 2025 Café en Línea. Todos los derechos reservados.</small>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

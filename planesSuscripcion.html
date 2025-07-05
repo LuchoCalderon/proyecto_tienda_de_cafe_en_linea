@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Café en Línea - Planes de Suscripción</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
+<link rel="stylesheet" href="styles.css">
+<style>
+  .navbar {
+    background-color: var(--dark-brown);
+  }
+  
+  .navbar-brand, .nav-link {
+    color: var(--cream);
+  }
+  
+  .nav-link:hover {
+    color: #fff;
+  }
+  
+  .search-form {
+    max-width: 400px;
+  }
+  
+  .hero-section {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/cafe.jpeg');
+    background-size: cover;
+    background-position: center;
+    color: white;
+    padding: 100px 0;
+    margin-bottom: 60px;
+  }
+  
+  .plan-card {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    border-radius: 10px;
+    overflow: hidden;
+    height: 100%;
+    border: none;
+  }
+  
+  .plan-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+  }
+  
+  .plan-card.featured {
+    border: 2px solid var(--coffee-brown);
+    position: relative;
+  }
+  
+  .featured-badge {
+    position: absolute;
+    top: 0;
+    right: 0;
+    background-color: var(--coffee-brown);
+    color: white;
+    padding: 8px 15px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-bottom-left-radius: 10px;
+  }
+  
+  .plan-header {
+    background-color: var(--coffee-brown);
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .plan-price {
+    font-size: 2.5rem;
+    font-weight: 700;
+  }
+  
+  .plan-price small {
+    font-size: 1rem;
+    font-weight: 400;
+  }
+  
+  .plan-features {
+    padding: 20px;
+  }
+  
+  .plan-feature {
+    padding: 10px 0;
+    border-bottom: 1px solid #eee;
+    display: flex;
+    align-items: center;
+  }
+  
+  .plan-feature:last-child {
+    border-bottom: none;
+  }
+  
+  .feature-icon {
+    color: var(--coffee-brown);
+    margin-right: 10px;
+  }
+  
+  .testimonial-quote {
+    position: relative;
+    padding: 20px;
+    background: #f9f9f9;
+    border-radius: 10px;
+  }
+  
+  .testimonial-quote::before {
+    content: '"';
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    font-size: 4rem;
+    color: var(--coffee-brown);
+    opacity: 0.2;
+    line-height: 1;
+  }
+  
+  .faq-section .accordion-button:not(.collapsed) {
+    background-color: rgba(111, 78, 55, 0.1);
+    color: var(--coffee-brown);
+  }
+  
+  .faq-section .accordion-button:focus {
+    border-color: var(--coffee-brown);
+    box-shadow: 0 0 0 0.25rem rgba(111, 78, 55, 0.25);
+  }
+</style>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg sticky-top">
+  <div class="container">
+    <a class="navbar-brand" href="home.html">Café en Línea</a>
+    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav me-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="home.html">Inicio</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="catalogo.html">Catálogo</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="planesSuscripcion.html">Suscripciones</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="sobreNosotros.html">Sobre Nosotros</a> 
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="contactenos.html">Contacto</a>
+        </li>
+      </ul>
+      <form class="d-flex search-form">
+        <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Search">
+        <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
+      </form>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link" href="login.html"><i class="bi bi-person"></i> Iniciar Sesión</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="carritoCompra.html"><i class="bi bi-cart"></i> Carrito (0)</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<!-- Hero Section -->
+<section class="hero-section text-center">
+  <div class="container">
+    <h1 class="display-4 fw-bold mb-4">Suscríbete a la mejor experiencia de café</h1>
+    <p class="lead fw-bold mb-5">En cualquier lugar colombia, recibe café recién tostado o molido, directamente en tu puerta. 
+      <br>Clientes locales podran disfutar nuestra variedad de bebidas frias y calientes a base de café. 
+      <br>Sin complicaciones, sin quedarte sin café. </p>
+  </div>
+</section>
+
+<!-- Planes de Suscripción -->
+<section class="container mb-5">
+  <div class="text-center mb-5">
+    <h2 class="coffee-title mb-3">Nuestros Planes de Suscripción</h2>
+    <p class="lead text-muted">Elige el plan que mejor se adapte a tus necesidades y disfruta de café premium en cada taza.</p>
+  </div>
+  
+  <div class="row g-4">
+    <!-- Plan Básico -->
+    <div class="col-lg-4">
+      <div class="card plan-card h-100 shadow">
+        <div class="plan-header">
+          <h3 class="mb-3">Plan Básico</h3>
+          <div class="plan-price mb-0">$29.900<small>/mes</small></div>
+        </div>
+        <div class="plan-features">
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>250g de café mensual</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>1 tipo de café por envío</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>Envío estándar incluido</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>Acceso a cafés exclusivos</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>Puedes cancelar en cualquier momento</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-x-circle-fill text-muted feature-icon"></i>
+            <span class="text-muted">Sin accesorios incluidos</span>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-0 text-center p-4">
+          <a href="#" class="btn btn-outline-primary btn-lg w-100">Suscribirme</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Plan Premium (Destacado) -->
+    <div class="col-lg-4">
+      <div class="card plan-card featured h-100 shadow">
+        <div class="featured-badge">Más Popular</div>
+        <div class="plan-header">
+          <h3 class="mb-3">Plan Premium</h3>
+          <div class="plan-price mb-0">$49.900<small>/mes</small></div>
+        </div>
+        <div class="plan-features">
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>500g de café mensual</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>2 tipos de café por envío</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>Envío express incluido</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>Acceso a cafés exclusivos</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>Puedes cancelar en cualquier momento</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>Accesorio sorpresa cada 3 meses</span>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-0 text-center p-4">
+          <a href="#" class="btn btn-outline-primary btn-lg w-100">Suscribirme</a>
+        </div>
+      </div>
+    </div>
+    
+    <!-- Plan Barista -->
+    <div class="col-lg-4">
+      <div class="card plan-card h-100 shadow">
+        <div class="plan-header">
+          <h3 class="mb-3">Plan Barista</h3>
+          <div class="plan-price mb-0">$79.900<small>/mes</small></div>
+        </div>
+        <div class="plan-features">
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>1kg de café mensual</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>3 tipos de café por envío</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>Envío express incluido</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>Acceso a cafés exclusivos y ediciones limitadas</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>Puedes cancelar en cualquier momento</span>
+          </div>
+          <div class="plan-feature">
+            <i class="bi bi-check-circle-fill feature-icon"></i>
+            <span>Accesorio premium garantizado cada mes</span>
+          </div>
+        </div>
+        <div class="card-footer bg-white border-0 text-center p-4">
+          <a href="#" class="btn btn-outline-primary btn-lg w-100">Suscribirme</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Cómo Funciona -->
+<section class="container mb-5">
+  <div class="text-center mb-5">
+    <h2 class="coffee-title mb-3">¿Cómo Funciona?</h2>
+    <p class="lead text-muted">Es sencillo, flexible y está diseñado pensando en ti.</p>
+  </div>
+  
+  <div class="row g-4">
+    <div class="col-md-3 text-center">
+      <div class="mb-3">
+        <div class="bg-light p-3 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+          <i class="bi bi-cup-hot fs-1 text-primary"></i>
+        </div>
+      </div>
+      <h4>Elige tu Plan</h4>
+      <p>Selecciona el plan que mejor se adapte a tus hábitos de consumo de café.</p>
+    </div>
+    
+    <div class="col-md-3 text-center">
+      <div class="mb-3">
+        <div class="bg-light p-3 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+          <i class="bi bi-sliders fs-1 text-primary"></i>
+        </div>
+      </div>
+      <h4>Personaliza</h4>
+      <p>Elige tus preferencias de café, método de preparación y frecuencia de entrega.</p>
+    </div>
+    
+    <div class="col-md-3 text-center">
+      <div class="mb-3">
+        <div class="bg-light p-3 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+          <i class="bi bi-truck fs-1 text-primary"></i>
+        </div>
+      </div>
+      <h4>Recibe</h4>
+      <p>Disfruta de tu café recién tostado directamente en la puerta de tu casa.</p>
+    </div>
+    
+    <div class="col-md-3 text-center">
+      <div class="mb-3">
+        <div class="bg-light p-3 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
+          <i class="bi bi-arrow-repeat fs-1 text-primary"></i>
+        </div>
+      </div>
+      <h4>Ajusta</h4>
+      <p>Cambia, pausa o cancela tu suscripción en cualquier momento sin compromiso.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Personalización -->
+<section class="bg-light py-5 mb-5">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-6 mb-4 mb-lg-0">
+        <h2 class="coffee-title mb-4">Personaliza tu experiencia</h2>
+        <p class="lead mb-4">Cada suscripción puede ser adaptada a tus gustos y preferencias.</p>
+        
+        <div class="mb-4">
+          <h5 class="mb-3"><i class="bi bi-cup-fill me-2 text-primary"></i> Tipo de café</h5>
+          <p>Elige entre nuestros orígenes únicos o mezclas exclusivas. Puedes cambiar tu selección en cada envío.</p>
+        </div>
+        
+        <div class="mb-4">
+          <h5 class="mb-3"><i class="bi bi-gear-fill me-2 text-primary"></i> Tipo de molienda</h5>
+          <p>Selecciona el tipo de molienda según tu método de preparación: grano entero, gruesa, media o fina.</p>
+        </div>
+        
+        <div>
+          <h5 class="mb-3"><i class="bi bi-calendar-check me-2 text-primary"></i> Frecuencia de entrega</h5>
+          <p>Elige recibir tu café cada semana, cada dos semanas o mensualmente. Ajusta según tu consumo.</p>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <img src="images/personalizacioCafe.png" alt="Personalización de café" class="img-fluid rounded shadow">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Testimonios -->
+<section class="container mb-5">
+  <div class="text-center mb-5">
+    <h2 class="coffee-title mb-3">Lo que dicen nuestros suscriptores</h2>
+    <p class="lead text-muted">Conoce las experiencias de quienes ya disfrutan de nuestro servicio de suscripción.</p>
+  </div>
+  
+  <div class="row g-4">
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow">
+        <div class="card-body">
+          <div class="testimonial-quote mb-3">
+            <p>"Llevo 2 meses con la suscripción Premium y ha sido una experiencia increíble. El café siempre llega recién tostado y los accesorios sorpresa son de gran calidad. ¡No puedo imaginar mis mañanas sin Café Aroma!"</p>
+          </div>
+          <div class="d-flex align-items-center">
+            <img src="images/persona2.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
+            <div>
+              <h6 class="mb-0">Ana Martínez</h6>
+              <div class="star-rating text-warning">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow">
+        <div class="card-body">
+          <div class="testimonial-quote mb-3">
+            <p>"Como barista aficionado, el Plan Barista ha sido un descubrimiento fascinante. He podido probar variedades de café que no encontraría en ninguna tienda local. La flexibilidad para cambiar mis preferencias es lo que más valoro."</p>
+          </div>
+          <div class="d-flex align-items-center">
+            <img src="images/persona3.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
+            <div>
+              <h6 class="mb-0">Javier López</h6>
+              <div class="star-rating text-warning">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-half"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="col-md-4">
+      <div class="card h-100 border-0 shadow">
+        <div class="card-body">
+          <div class="testimonial-quote mb-3">
+            <p>"Empecé con el Plan Básico y ahora estoy en el Premium. La diferencia en calidad comparado con el café de supermercado es abismal. Además, el servicio al cliente es excelente y siempre responden rápidamente a cualquier consulta."</p>
+          </div>
+          <div class="d-flex align-items-center">
+            <img src="images/persona1.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
+            <div>
+              <h6 class="mb-0">Carlos Rodríguez</h6>
+              <div class="star-rating text-warning">
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+                <i class="bi bi-star-fill"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Preguntas Frecuentes -->
+<section class="container mb-5 faq-section">
+  <div class="text-center mb-5">
+    <h2 class="coffee-title mb-3">Preguntas Frecuentes</h2>
+    <p class="lead text-muted">Resolvemos tus dudas sobre nuestros planes de suscripción.</p>
+  </div>
+  
+  <div class="row justify-content-center">
+    <div class="col-lg-10">
+      <div class="accordion" id="faqAccordion">
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingOne">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+              ¿Puedo cancelar mi suscripción en cualquier momento?
+            </button>
+          </h2>
+          <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Sí, puedes cancelar tu suscripción en cualquier momento sin penalización. Simplemente accede a tu cuenta, ve a la sección "Mis Suscripciones" y selecciona la opción de cancelar. La cancelación se hará efectiva para el siguiente ciclo de facturación.
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingTwo">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+              ¿Cómo puedo cambiar mis preferencias de café?
+            </button>
+          </h2>
+          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Puedes cambiar tus preferencias en cualquier momento desde tu cuenta. Ve a "Mis Suscripciones", selecciona la suscripción que deseas modificar y ajusta tus preferencias. Los cambios se aplicarán en tu próximo envío, siempre que los realices al menos 48 horas antes de la fecha programada de procesamiento.
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingThree">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+              ¿Cuál es la política de envío?
+            </button>
+          </h2>
+          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              El costo de envío está incluido en todos nuestros planes de suscripción. Los envíos estándar (Plan Básico) toman entre 3-5 días hábiles, mientras que los envíos express (Planes Premium y Barista) toman 1-2 días hábiles. Actualmente enviamos a todas las principales ciudades de Colombia.
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingFour">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+              ¿Qué pasa si no estoy en casa cuando llega mi pedido?
+            </button>
+          </h2>
+          <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              Nuestro servicio de mensajería intentará entregar tu pedido hasta en dos ocasiones. Si después de los intentos no pudieron entregarlo, el paquete se dejará en el punto de recogida más cercano y recibirás una notificación con las instrucciones para recogerlo.
+            </div>
+          </div>
+        </div>
+        
+        <div class="accordion-item">
+          <h2 class="accordion-header" id="headingFive">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+              ¿Puedo regalar una suscripción?
+            </button>
+          </h2>
+          <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
+            <div class="accordion-body">
+              ¡Sí! Ofrecemos suscripciones de regalo por 3, 6 o 12 meses. Puedes personalizar la fecha de inicio y enviar un mensaje personalizado. El destinatario recibirá un correo electrónico con todos los detalles para configurar sus preferencias, pero no verá el precio que pagaste.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA Final -->
+<section class="bg-primary text-white py-5">
+  <div class="container text-center">
+    <h2 class="mb-4">¿Listo para disfrutar del mejor café cada mes?</h2>
+    <p class="lead mb-4">Únete a nuestra comunidad de amantes del café y descubre un mundo de sabores.</p>
+    <a href="#" class="btn btn-light btn-lg">Comenzar mi suscripción</a>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-dark text-light py-4 mt-5">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h5>Café en Línea</h5>
+        <p>Ofreciendo la mejor experiencia de café desde 2024.</p>
+        <div class="d-flex">
+          <a href="#" class="text-light me-3"><i class="bi bi-facebook"></i></a>
+          <a href="#" class="text-light me-3"><i class="bi bi-instagram"></i></a>
+          <a href="#" class="text-light"><i class="bi bi-twitter"></i></a>
+        </div>
+      </div>
+      <div class="col-md-4 mb-3 mb-md-0">
+        <h5>Enlaces rápidos</h5>
+        <ul class="list-unstyled">
+          <li><a href="home.html" class="text-light text-decoration-none">Inicio</a></li>
+          <li><a href="catalogo.html" class="text-light text-decoration-none">Catálogo</a></li>
+          <li><a href="sobreNosotros.html" class="text-light text-decoration-none">Sobre Nosotros</a></li>
+          <li><a href="contactenos.html" class="text-light text-decoration-none">Contacto</a></li>
+        </ul>
+      </div>
+      <div class="col-md-4">
+        <h5>Contacto</h5>
+        <address class="text-light">
+          <i class="bi bi-geo-alt"></i> Calle Principal #123, Granada<br>
+          <i class="bi bi-telephone"></i> (123) 456-7890<br>
+          <i class="bi bi-envelope"></i> info@cafeenlinea.com
+        </address>
+      </div>
+    </div>
+    <hr class="my-3 bg-light">
+    <div class="text-center">
+      <small>&copy; 2024 Café en Línea. Todos los derechos reservados.</small>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,102 @@
+/* Paleta de colores para la tienda de café en línea */
+:root {
+    --coffee-brown: #6f4e37;
+    --cream: #f5f5dc;
+    --dark-brown: #3a2718;
+  }
+  
+  body {
+    background-color: var(--cream);
+    font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  .coffee-title {
+    color: var(--coffee-brown);
+    font-weight: 700;
+  }
+  
+  .card {
+    border: none;
+    border-radius: 10px;
+  }
+  
+  .small-card {
+    max-width: 600px;
+    width: 100%;
+    
+    
+  }
+  
+  .btn-primary {
+    background-color: var(--coffee-brown);
+    border-color: var(--coffee-brown);
+  }
+  
+  .btn-primary:hover,
+  .btn-primary:focus {
+    background-color: var(--dark-brown);
+    border-color: var(--dark-brown);
+  }
+  
+  .btn-outline-secondary {
+    color: var(--coffee-brown);
+    border-color: var(--coffee-brown);
+  }
+  
+  .btn-outline-secondary:hover {
+    background-color: var(--coffee-brown);
+    border-color: var(--coffee-brown);
+  }
+  
+  a {
+    color: var(--coffee-brown);
+  }
+  
+  a:hover {
+    color: var(--dark-brown);
+  }
+  
+  .form-control:focus {
+    border-color: var(--coffee-brown);
+    box-shadow: 0 0 0 0.25rem rgba(111, 78, 55, 0.25);
+  }
+  
+  .form-check-input:checked {
+    background-color: var(--coffee-brown);
+    border-color: var(--coffee-brown);
+  }
+  
+  .error-icon {
+    color: var(--dark-brown);
+  }
+  
+  .object-fit-cover {
+    object-fit: cover;
+  }
+  
+  /* Estilos responsivos */
+  @media (max-width: 767px) {
+    .small-card {
+      max-width: none;
+    }
+  }
+  
+  .custom-image {
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+  
+  .image-container {
+    height: 100vh; 
+    overflow:auto;
+  }
+  
+  @media (max-width: 767px) {
+    .image-container {
+      height: 30vh; 
+    }
+  }
+  
+  

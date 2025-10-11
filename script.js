@@ -1,18 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
-    // Cargar la barra de navegación
-    fetch('navbar.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('navbar-placeholder').innerHTML = data;
-      });
-    
-    // Cargar el pie de página
-    fetch('footer.html')
-      .then(response => response.text())
-      .then(data => {
-        document.getElementById('footer-placeholder').innerHTML = data;
-      });
-  });
+
 
   document.addEventListener('DOMContentLoaded', function() {
   const navLinks = document.querySelectorAll('.navbar-nav .nav-link');
@@ -27,3 +13,30 @@ document.addEventListener('DOMContentLoaded', function() {
     });
   });
 });
+
+// Función para mostrar la contraseña
+function showPassword(inputId) {
+    const passwordInput = document.getElementById(inputId);
+    const eyeIcon = document.getElementById(inputId + '-eye');
+    
+    passwordInput.type = 'text';
+    eyeIcon.className = 'bi bi-eye-slash';
+}
+
+function hidePassword(inputId) {
+    const passwordInput = document.getElementById(inputId);
+    const eyeIcon = document.getElementById(inputId + '-eye');
+    
+    passwordInput.type = 'password';
+    eyeIcon.className = 'bi bi-eye';
+}
+
+// Alternar barra lateral
+document.querySelector('.toggle-sidebar').addEventListener('click', function() {
+  document.querySelector('.sidebar').classList.toggle('active');
+  document.querySelector('.main-content').classList.toggle('active');
+});
+
+// fecha actual
+const options = { year: 'numeric', month: 'long', day: 'numeric' };
+document.getElementById('currentDate').textContent = new Date().toLocaleDateString('es-ES', options);

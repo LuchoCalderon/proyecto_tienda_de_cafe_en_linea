@@ -1,3 +1,21 @@
+<?php
+// Obtener categorías de la base de datos para mostrar sus imágenes
+require_once 'config/db_config.php';
+try {
+    $pdo = getDBConnection();
+    $stmt = $pdo->query("
+        SELECT c.id, c.nombre, c.descripcion, c.imagen,
+               COUNT(p.id) as totalProductos
+        FROM categoria c
+        LEFT JOIN producto p ON c.id = p.categoriaId AND p.activo = 1
+        GROUP BY c.id
+        ORDER BY c.nombre
+    ");
+    $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (Exception $e) {
+    $categorias = [];
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -22,27 +40,44 @@
     border-radius: 10px;
     overflow: hidden;
     height: 200px;
+    cursor: pointer;
+    text-decoration: none;
+    display: block;
+    position: relative;
   }
   
   .category-card:hover {
     transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    box-shadow: 0 10px 20px rgba(0,0,0,0.2);
   }
   
   .category-card img {
-    height: 200%;
+    height: 100%;
+    width: 100%;
     object-fit: cover;
+    object-position: center;
   }
   
   .category-card .card-img-overlay {
     background: linear-gradient(to top, rgba(0,0,0,0.7), rgba(0,0,0,0.2));
     display: flex;
     align-items: flex-end;
+    padding: 1rem;
   }
-
-  .category-card .card-img-top{
-    height: 100px;
-
+  
+  .category-card .card-title {
+    color: white;
+    font-weight: 600;
+    margin-bottom: 0;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  }
+  
+  .category-count {
+    background-color: rgba(255,255,255,0.3);
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-size: 0.85rem;
+    margin-left: 8px;
   }
   
   .featured-product {
@@ -54,7 +89,7 @@
   }
 
   .featured-product .product-img-container {
-    height: 200px;
+    height: 250px;
     width: 100%;
     overflow: hidden;
     position: relative;
@@ -66,48 +101,53 @@
     object-fit: cover; 
   }
 
-  
-
   .testimonial-card {
     background-color: #f8f9fa;
     border-radius: 10px;
     padding: 20px;
   }
   
-
   .subscription-section {
     background-color: var(--coffee-brown);
     color: white;
     padding: 60px 0;
   }
   
-  .blog-card {
-    transition: transform 0.3s ease;
-    height: 100%;
+  .skeleton-card {
+    animation: pulse 1.5s infinite;
   }
   
-  .blog-card:hover {
-    transform: translateY(-5px);
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.5; }
   }
   
-  .blog-image {
-    height: 200px;
-    object-fit: cover;
+  .toast-container {
+    position: fixed;
+    top: 80px;
+    right: 20px;
+    z-index: 9999;
+  }
+  
+  @media (max-width: 576px) {
+    .category-card {
+      height: 150px;
+    }
   }
 </style>
 </head>
 <body>
-<!-- Navbar -->
-  <?php include 'includes/navbar.php'; ?>
+
+<?php include 'includes/navbar.php'; ?>
 
 <!-- Hero Section -->
-<section class="hero-section text-center">
-  <div class="container">
-    <h1 class="display-4 fw-bold mb-4">Descubre el verdadero sabor del café</h1>
-    <p class="lead fw-bold mb-5">Seleccionamos los mejores granos de café de todo el mundo para ofrecerte una experiencia única en cada taza.</p>
-    <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-      <a href="catalogo.php" class="btn btn-primary btn-lg px-4 gap-3">Explorar productos</a>
-      <a href="planesSuscripcion.php" class="btn btn-outline-light btn-lg px-4">Suscripciones</a>
+<section class="hero-section">
+  <div class="container text-center">
+    <h1 class="display-4 fw-bold mb-3">Café Premium de Colombia</h1>
+    <p class="lead mb-4">Descubre la excelencia en cada taza. Café 100% colombiano, tostado artesanalmente.</p>
+    <div class="d-flex gap-3 justify-content-center">
+      <a href="catalogo.php" class="btn btn-primary btn-lg">Explorar catálogo</a>
+      <a href="planesSuscripcion.php" class="btn btn-outline-light btn-lg">Suscribirme</a>
     </div>
   </div>
 </section>
@@ -116,48 +156,50 @@
 <section class="container mb-5">
   <h2 class="coffee-title text-center mb-4">Nuestras Categorías</h2>
   <div class="row g-3">
-    <!-- En móvil: 2 columnas, en tablet: 3 columnas, en desktop: 5 columnas -->
-    <div class="col-6 col-md-4 col-lg-2">
-      <div class="card category-card">
-        <img src="images/cafeGrano.png" class="card-img" alt="Café en Grano">
-        <div class="card-img-overlay">
-          <h5 class="card-title text-white">Café en Grano</h5>
+    <?php if (!empty($categorias)): ?>
+      <?php foreach ($categorias as $cat): ?>
+        <div class="col-6 col-md-4 col-lg-2">
+          <a href="catalogo.php?categoria=<?php echo $cat['id']; ?>" class="card category-card">
+            <?php 
+            $imagenSrc = !empty($cat['imagen']) ? htmlspecialchars($cat['imagen']) : 'images/placeholder-category.jpg';
+            ?>
+            <img src="<?php echo $imagenSrc; ?>" class="card-img" alt="<?php echo htmlspecialchars($cat['nombre']); ?>" onerror="this.src='images/placeholder-category.jpg'">
+            <div class="card-img-overlay">
+              <h5 class="card-title">
+                <?php echo htmlspecialchars($cat['nombre']); ?>
+                <span class="category-count"><?php echo $cat['totalProductos']; ?></span>
+              </h5>
+            </div>
+          </a>
         </div>
+      <?php endforeach; ?>
+    <?php else: ?>
+      <!-- Categorías por defecto si no hay en BD -->
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="catalogo.php" class="card category-card">
+          <img src="images/cafeGrano.png" class="card-img" alt="Café en Grano" onerror="this.src='images/placeholder-category.jpg'">
+          <div class="card-img-overlay">
+            <h5 class="card-title text-white">Café en Grano</h5>
+          </div>
+        </a>
       </div>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <div class="card category-card">
-        <img src="images/cafeMolido.png" class="card-img" alt="Café Molido">
-        <div class="card-img-overlay">
-          <h5 class="card-title text-white">Café Molido</h5>
-        </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="catalogo.php" class="card category-card">
+          <img src="images/cafeMolido.png" class="card-img" alt="Café Molido" onerror="this.src='images/placeholder-category.jpg'">
+          <div class="card-img-overlay">
+            <h5 class="card-title text-white">Café Molido</h5>
+          </div>
+        </a>
       </div>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <div class="card category-card">
-        <img src="images/bebidas.png" class="card-img" alt="Bebidas">
-        <div class="card-img-overlay">
-          <h5 class="card-title text-white">Bebidas</h5>
-        </div>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="catalogo.php" class="card category-card">
+          <img src="images/bebidas.png" class="card-img" alt="Bebidas" onerror="this.src='images/placeholder-category.jpg'">
+          <div class="card-img-overlay">
+            <h5 class="card-title text-white">Bebidas</h5>
+          </div>
+        </a>
       </div>
-    </div>
-    <div class="col-6 col-md-4 col-lg-2">
-      <div class="card category-card">
-        <img src="images/accesorios.png" class="card-img" alt="Accesorios">
-        <div class="card-img-overlay">
-          <h5 class="card-title text-white">Accesorios</h5>
-        </div>
-      </div>
-    </div>
-    <!-- Esta se centra en móvil -->
-    <div class="col-12 col-md-4 col-lg-2 mx-md-auto mx-lg-0">
-      <div class="card category-card">
-        <img src="images/maquina_cafe.jpg" class="card-img" alt="Máquinas">
-        <div class="card-img-overlay">
-          <h5 class="card-title text-white">Máquinas</h5>
-        </div>
-      </div>
-    </div>
+    <?php endif; ?>
   </div>
 </section>
 
@@ -165,71 +207,28 @@
 <section class="container mb-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="coffee-title mb-0">Productos Destacados</h2>
-    <a href="catalogo.html" class="btn btn-outline-secondary">Ver todos</a>
+    <a href="catalogo.php?destacados=1" class="btn btn-outline-secondary">Ver todos</a>
   </div>
   
-  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4">
-    <!-- Producto 1 -->
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="productosDestacados">
+    <!-- Skeleton loading -->
     <div class="col">
-      <div class="card featured-product h-100">
-        <span class="badge bg-danger position-absolute top-0 end-0 m-2">-15%</span>
-        <img src="images/cafepremium.png" class="card-img-top product-img"  alt="Café Colombiano">
+      <div class="card skeleton-card">
+        <div class="bg-secondary" style="height: 250px;"></div>
         <div class="card-body">
-          <h5 class="card-title">Café Colombiano Premium</h5>
-          <p class="card-text text-muted small">Café en grano</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <div>
-              <span class="text-decoration-line-through text-muted me-2">$29.000</span>
-              <span class="fs-5 fw-bold">$25.000</span>
-            </div>
-            <button class="btn btn-primary"><i class="bi bi-cart-plus"></i></button>
-          </div>
+          <div class="bg-secondary rounded mb-2" style="height: 20px; width: 70%;"></div>
+          <div class="bg-secondary rounded mb-2" style="height: 15px; width: 50%;"></div>
+          <div class="bg-secondary rounded" style="height: 30px; width: 40%;"></div>
         </div>
       </div>
     </div>
-    
-    <!-- Producto 2 -->
     <div class="col">
-      <div class="card featured-product h-100">
-        <img src="images/granizado.png" class="card-img-top product-img" alt="Granizado">
+      <div class="card skeleton-card">
+        <div class="bg-secondary" style="height: 250px;"></div>
         <div class="card-body">
-          <h5 class="card-title">Granizado Café</h5>
-          <p class="card-text text-muted small">Bebidas</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="fs-5 fw-bold">$12.000</span>
-            <button class="btn btn-primary"><i class="bi bi-cart-plus"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Producto 3 -->
-    <div class="col">
-      <div class="card featured-product h-100">
-        <span class="badge bg-success position-absolute top-0 end-0 m-2">Nuevo</span>
-        <img src="images/dripper.png" class="card-img-top product-img" alt="Dripper">
-        <div class="card-body">
-          <h5 class="card-title">Dripper de Cerámica</h5>
-          <p class="card-text text-muted small">Accesorios</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="fs-5 fw-bold">$38.000</span>
-            <button class="btn btn-primary"><i class="bi bi-cart-plus"></i></button>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <!-- Producto 4 -->
-    <div class="col">
-      <div class="card featured-product h-100">
-        <img src="images/cafetera.png" class="card-img-top product-img" alt="Cafetera">
-        <div class="card-body">
-          <h5 class="card-title">Cafetera Italiana Clásica</h5>
-          <p class="card-text text-muted small">Máquinas</p>
-          <div class="d-flex justify-content-between align-items-center">
-            <span class="fs-5 fw-bold">$120.000</span>
-            <button class="btn btn-primary"><i class="bi bi-cart-plus"></i></button>
-          </div>
+          <div class="bg-secondary rounded mb-2" style="height: 20px; width: 70%;"></div>
+          <div class="bg-secondary rounded mb-2" style="height: 15px; width: 50%;"></div>
+          <div class="bg-secondary rounded" style="height: 30px; width: 40%;"></div>
         </div>
       </div>
     </div>
@@ -248,7 +247,7 @@
             <h3 class="coffee-title mb-3">Plan Mensual</h3>
             <p class="mb-4">Selecciona tus cafés favoritos y recíbelos cada mes con envío gratuito.</p>
             <div class="d-grid">
-              <a href="planesSuscripcion.html" class="btn btn-primary">Ver planes</a>
+              <a href="planesSuscripcion.php" class="btn btn-primary">Ver planes</a>
             </div>
           </div>
         </div>
@@ -262,71 +261,162 @@
   <h2 class="coffee-title text-center mb-4">Lo que dicen nuestros clientes</h2>
   <div class="row g-4">
     <div class="col-md-4">
-      <div class="testimonial-card h-100">
-        <div class="star-rating mb-3" style="color: #ffc107;">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
+      <div class="testimonial-card">
+        <div class="mb-3">
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
         </div>
-        <p class="mb-3">"El mejor café que he probado. La suscripción mensual es perfecta para mí, nunca me quedo sin mi dosis diaria de café de calidad."</p>
-        <div class="d-flex align-items-center">
-          <img src="images/persona1.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
-          <div>
-            <h6 class="mb-0">Carlos Rodríguez</h6>
-            <small class="text-muted">Cliente desde enero 2025</small>
-          </div>
-        </div>
+        <p>"El mejor café que he probado. La suscripción mensual es perfecta."</p>
+        <footer class="text-muted">— María G.</footer>
       </div>
     </div>
     <div class="col-md-4">
-      <div class="testimonial-card h-100">
-        <div class="star-rating mb-3" style="color: #ffc107;">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-half"></i>
+      <div class="testimonial-card">
+        <div class="mb-3">
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
         </div>
-        <p class="mb-3">"La variedad de cafés de especialidad es impresionante. He descubierto sabores que no sabía que existían. El servicio al cliente es excelente."</p>
-        <div class="d-flex align-items-center">
-          <img src="images/persona2.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
-          <div>
-            <h6 class="mb-0">Ana Martínez</h6>
-            <small class="text-muted">Cliente desde febrero 2025</small>
-          </div>
-        </div>
+        <p>"Calidad excepcional y envío rápido. Totalmente recomendado."</p>
+        <footer class="text-muted">— Carlos R.</footer>
       </div>
     </div>
     <div class="col-md-4">
-      <div class="testimonial-card h-100">
-        <div class="star-rating mb-3" style="color: #ffc107;">
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
-          <i class="bi bi-star-fill"></i>
+      <div class="testimonial-card">
+        <div class="mb-3">
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
+          <i class="bi bi-star-fill text-warning"></i>
         </div>
-        <p class="mb-3">"Como barista aficionado, puedo decir que la calidad de los cafés es excepcional. Los accesorios también son de primera calidad. Totalmente recomendado."</p>
-        <div class="d-flex align-items-center">
-          <img src="images/persona3.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
-          <div>
-            <h6 class="mb-0">Javier López</h6>
-            <small class="text-muted">Cliente desde marzo 2025</small>
-          </div>
-        </div>
+        <p>"Excelente servicio al cliente. El café es delicioso."</p>
+        <footer class="text-muted">— Ana M.</footer>
       </div>
     </div>
   </div>
 </section>
 
+<?php include 'includes/footer.php'; ?>
 
-<!-- Footer -->
- <?php include 'includes/footer.php'; ?>
+<!-- Toast container -->
+<div class="toast-container"></div>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
 
-<script src="script.js"></script>
+// Cargar productos destacados
+async function cargarProductosDestacados() {
+  try {
+    const response = await fetch(basePath + 'php/catalogo_api.php?destacados=1&porPagina=8');
+    const data = await response.json();
+    
+    const container = document.getElementById('productosDestacados');
+    container.innerHTML = '';
+    
+    if (data.success && data.data.length > 0) {
+      const productosAMostrar = data.data.slice(0, 4);
+      
+      productosAMostrar.forEach(prod => {
+        const imagenSrc = prod.imagen || 'images/placeholder.png';
+        const stockBajo = prod.stockDisponible > 0 && prod.stockDisponible <= 5;
+        const agotado = prod.stockDisponible <= 0;
+        
+        container.innerHTML += `
+          <div class="col">
+            <div class="card featured-product h-100">
+              ${!agotado && prod.destacado ? '<span class="badge bg-warning text-dark position-absolute top-0 end-0 m-2 z-3">Destacado</span>' : ''}
+              ${agotado ? '<span class="badge bg-danger position-absolute top-0 end-0 m-2 z-3">Agotado</span>' : ''}
+              <div class="product-img-container">
+                <a href="productos.php?id=${prod.id}">
+                  <img src="${imagenSrc}" class="product-img" alt="${prod.nombre}" onerror="this.src='images/placeholder.png'">
+                </a>
+              </div>
+              <div class="card-body d-flex flex-column">
+                <h5 class="card-title">${prod.nombre}</h5>
+                <p class="card-text text-muted small">${prod.categoriaNombre || 'Sin categoría'}</p>
+                <div class="mt-auto">
+                  <div class="d-flex justify-content-between align-items-center">
+                    <span class="fs-5 fw-bold">$${Number(prod.precio).toLocaleString('es-CO')}</span>
+                    <button class="btn btn-primary btn-sm" onclick="agregarAlCarrito(${prod.id})" ${agotado ? 'disabled' : ''}>
+                      <i class="bi bi-cart-plus"></i> ${agotado ? 'Agotado' : 'Añadir'}
+                    </button>
+                  </div>
+                  ${stockBajo ? '<small class="text-warning mt-1 d-block"><i class="bi bi-exclamation-triangle"></i> Pocas unidades</small>' : ''}
+                </div>
+              </div>
+            </div>
+          </div>`;
+      });
+    } else {
+      container.innerHTML = `
+        <div class="col-12 text-center py-5">
+          <i class="bi bi-box-seam" style="font-size: 3rem; color: #ccc;"></i>
+          <p class="text-muted mt-3">No hay productos destacados disponibles</p>
+          <a href="catalogo.php" class="btn btn-primary">Ver catálogo completo</a>
+        </div>`;
+    }
+  } catch (e) {
+    console.error('Error al cargar productos destacados:', e);
+  }
+}
+
+// Agregar al carrito
+async function agregarAlCarrito(productoId) {
+  try {
+    const formData = new FormData();
+    formData.append('productoId', productoId);
+    formData.append('cantidad', 1);
+    
+    const response = await fetch(basePath + 'php/carrito_api.php?action=agregar', {
+      method: 'POST',
+      body: formData
+    });
+    
+    const data = await response.json();
+    
+    if (data.success) {
+      mostrarToast('Producto agregado al carrito', 'success');
+      if (typeof actualizarContadorCarrito === 'function') {
+        actualizarContadorCarrito();
+      }
+    } else {
+      mostrarToast(data.message || 'Error al agregar al carrito', 'danger');
+    }
+  } catch (e) {
+    mostrarToast('Error de conexión', 'danger');
+  }
+}
+
+function mostrarToast(mensaje, tipo = 'success') {
+  const container = document.querySelector('.toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast align-items-center text-white bg-${tipo} border-0`;
+  toast.setAttribute('role', 'alert');
+  toast.innerHTML = `
+    <div class="d-flex">
+      <div class="toast-body">${mensaje}</div>
+      <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+    </div>`;
+  
+  container.appendChild(toast);
+  const bsToast = new bootstrap.Toast(toast);
+  bsToast.show();
+  
+  toast.addEventListener('hidden.bs.toast', function() {
+    toast.remove();
+  });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  cargarProductosDestacados();
+});
+</script>
 </body>
 </html>
-

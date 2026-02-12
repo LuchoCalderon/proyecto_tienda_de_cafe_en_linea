@@ -1,0 +1,32 @@
+[2026-02-04 07:09:23] Inicio de subida de avatar
+[2026-02-04 07:09:23] Archivo recibido: fotol.jpg - Tamaño: 152025
+[2026-02-04 07:09:23] Tipo MIME detectado: image/jpeg
+[2026-02-04 07:09:23] Intentando guardar en: uploads/avatars/avatar_1_1770185363.jpg
+[2026-02-04 07:09:23] Archivo guardado exitosamente
+[2026-02-04 07:24:10] Inicio de subida de avatar
+[2026-02-04 07:24:10] Archivo recibido: fotol.jpg - Tamaño: 152025
+[2026-02-04 07:24:10] Tipo MIME detectado: image/jpeg
+[2026-02-04 07:24:10] Intentando guardar en: uploads/avatars/avatar_1_1770186250.jpg
+[2026-02-04 07:24:10] Archivo guardado exitosamente
+[2026-02-04 07:34:06] Inicio de subida de avatar
+[2026-02-04 07:34:06] Archivo recibido: fotol.jpg - Tamaño: 152025
+[2026-02-04 07:34:06] Tipo MIME detectado: image/jpeg
+[2026-02-04 07:34:06] Intentando guardar en: uploads/avatars/avatar_1_1770186846.jpg
+[2026-02-04 07:34:06] Archivo guardado exitosamente
+[2026-02-04 07:34:06] Base de datos actualizada correctamente
+[2026-02-04 08:13:58] [CHANGE_PASSWORD] Inicio de cambio de contraseña
+[2026-02-04 08:13:58] [CHANGE_PASSWORD] ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'password' in 'field list'
+[2026-02-04 08:15:33] [CHANGE_PASSWORD] Inicio de cambio de contraseña
+[2026-02-04 08:15:33] [CHANGE_PASSWORD] ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'password' in 'field list'
+[2026-02-04 08:15:40] [CHANGE_PASSWORD] Inicio de cambio de contraseña
+[2026-02-04 08:15:40] [CHANGE_PASSWORD] ERROR: SQLSTATE[42S22]: Column not found: 1054 Unknown column 'password' in 'field list'
+[2026-02-04 08:16:14] [CHANGE_PASSWORD] Inicio de cambio de contraseña
+[2026-02-04 08:16:14] [CHANGE_PASSWORD] ERROR: Debes ingresar tu contraseña actual
+[2026-02-04 08:16:45] [CHANGE_PASSWORD] Inicio de cambio de contraseña
+[2026-02-04 08:16:45] [CHANGE_PASSWORD] ERROR: Debes ingresar tu contraseña actual
+[2026-02-04 08:16:55] [CHANGE_PASSWORD] Inicio de cambio de contraseña
+[2026-02-04 08:16:55] [CHANGE_PASSWORD] ERROR: Debes ingresar tu contraseña actual
+[2026-02-04 08:17:58] [CHANGE_PASSWORD] Inicio de cambio de contraseña
+[2026-02-04 08:17:58] [CHANGE_PASSWORD] ERROR: Debes ingresar tu contraseña actual
+[2026-02-05 05:42:12] [CHANGE_PASSWORD] Inicio de cambio de contraseña
+[2026-02-05 05:42:12] [CHANGE_PASSWORD] ERROR: Debes ingresar tu contraseña actual

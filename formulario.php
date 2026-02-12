@@ -30,15 +30,12 @@
               <p class="text-muted">Crea tu cuenta</p>
             </div>
             
-            <form action="./php/enviarDatos.php" method="POST">
+            <!-- Actualizado action y agregado id al formulario -->
+            <form id="formRegistro" action="./php/register.php" method="POST">
               <div class="row mb-3">
-                <div class="col-md-6 mb-3 mb-md-0">
-                  <label for="firstName" class="form-label">Nombres</label>
-                  <input type="text" class="form-control" id="firstName" name="nombres" placeholder="Ingresa tus nombres" required pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]{3,40}">
-                </div>
-                <div class="col-md-6">
-                  <label for="lastName" class="form-label">Apellidos</label>
-                  <input type="text" class="form-control" id="lastName" name="apellidos" placeholder="Ingresa tus apellidos" required pattern="[a-zA-ZñÑáéíóúÁÉÍÓÚ]{3,40}">
+                <div class="mb-3">
+                  <label for="firstName" class="form-label">Nombre Completo</label>
+                  <input type="text" class="form-control" id="firstName" name="nombres" placeholder="Ingresa tus nombres" required>
                 </div>
               </div>
 
@@ -48,15 +45,21 @@
                     <input type="text" class="form-control" id="cedula" name="cedula" placeholder="Ingresa tu número de cédula" required pattern="[0-9]{6,10}">
                 </div>
             
-              <div class="col-md-6">
-                <label for="birthdate" class="form-label">Fecha de nacimiento</label>
-                <input type="date" class="form-control" id="birthdate" required>
+                <div class="col-md-6">
+                  <label for="birthdate" class="form-label">Fecha de nacimiento</label>
+                  <input type="date" class="form-control" id="birthdate" name="birthdate" required>
+                </div>
               </div>
-            </div>
               
-              <div class="mb-3">
-                <label for="email" class="form-label">Correo electrónico</label>
-                <input type="email" class="form-control" id="email"  placeholder="tucorreo@ejemplo.com" required>
+              <div class="row mb-3">  
+                <div class="col-md-6 mb-3 mb-md-0">
+                  <label for="email" class="form-label">Correo electrónico</label>
+                  <input type="email" class="form-control" id="email" name="email" placeholder="tucorreo@ejemplo.com" required>
+                </div>
+                <div class="col-md-6">
+                    <label for="lastName" class="form-label">Teléfono</label>
+                    <input type="text" class="form-control" id="lastName" name="telefono" placeholder="Ingresa tu teléfono" required pattern="[0-9]{7,15}">
+                </div>
               </div>
               
               <div class="row mb-3">
@@ -71,10 +74,13 @@
                              name="password" 
                              placeholder="Crea una contraseña" 
                              required
+                             minlength="6"
                          >
                          <span 
                              class="input-group-text password-toggle" 
-                             onmouseenter="showPassword('password')"
+                             style="cursor: pointer;"
+                             onmousedown="showPassword('password')"
+                             onmouseup="hidePassword('password')"
                              onmouseleave="hidePassword('password')"
                          >
                              <i class="bi bi-eye" id="password-eye"></i>
@@ -96,14 +102,17 @@
                          >
                          <span 
                              class="input-group-text password-toggle" 
-                             onmouseenter="showPassword('confirmPassword')"
+                             style="cursor: pointer;"
+                             onmousedown="showPassword('confirmPassword')"
+                             onmouseup="hidePassword('confirmPassword')"
                              onmouseleave="hidePassword('confirmPassword')"
                          >
                              <i class="bi bi-eye" id="confirmPassword-eye"></i>
                          </span>
                      </div>
                  </div>
-           </div>
+              </div>
+              
               <div class="mb-3 form-check">
                 <input type="checkbox" class="form-check-input" id="termsCheck" required>
                 <label class="form-check-label" for="termsCheck">
@@ -111,8 +120,11 @@
                 </label>
               </div>
               
+              <!-- Agregado div para mensajes -->
+              <div id="mensajeRegistro" class="alert d-none" role="alert"></div>
+              
               <div class="d-grid gap-2">
-                <button type="submit" class="btn btn-primary">Registrarse</button>
+                <button type="submit" class="btn btn-primary" id="btnRegistro">Registrarse</button>
               </div>
             </form>
             
@@ -126,10 +138,79 @@
       </div>
     </div>
   </div>
-<!-- Footer -->
-<?php include 'includes/footer.php'; ?>
+  
+  <!-- Footer -->
+  <?php include 'includes/footer.php'; ?>
 
-  <script src="script.js"></script>
+  <!-- Agregado script para manejo del formulario -->
+  <script>
+  // Funciones para mostrar/ocultar contraseña
+  function showPassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    const icon = document.getElementById(fieldId + '-eye');
+    field.type = 'text';
+    icon.classList.remove('bi-eye');
+    icon.classList.add('bi-eye-slash');
+  }
+  
+  function hidePassword(fieldId) {
+    const field = document.getElementById(fieldId);
+    const icon = document.getElementById(fieldId + '-eye');
+    field.type = 'password';
+    icon.classList.remove('bi-eye-slash');
+    icon.classList.add('bi-eye');
+  }
+  
+  // Manejo del formulario de registro
+  document.getElementById('formRegistro').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    
+    const btnRegistro = document.getElementById('btnRegistro');
+    const mensajeDiv = document.getElementById('mensajeRegistro');
+    
+    // Deshabilitar botón
+    btnRegistro.disabled = true;
+    btnRegistro.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Registrando...';
+    
+    // Ocultar mensajes anteriores
+    mensajeDiv.classList.add('d-none');
+    
+    try {
+      const formData = new FormData(this);
+      const response = await fetch('./php/register.php', {
+        method: 'POST',
+        body: formData
+      });
+      
+      const data = await response.json();
+      
+      // Mostrar mensaje
+      mensajeDiv.classList.remove('d-none');
+      mensajeDiv.classList.remove('alert-success', 'alert-danger');
+      mensajeDiv.classList.add(data.success ? 'alert-success' : 'alert-danger');
+      mensajeDiv.textContent = data.message;
+      
+      if (data.success) {
+        // Redirigir al login después de 2 segundos
+        setTimeout(() => {
+          window.location.href = data.redirect;
+        }, 2000);
+      } else {
+        // Rehabilitar botón si hay error
+        btnRegistro.disabled = false;
+        btnRegistro.innerHTML = 'Registrarse';
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      mensajeDiv.classList.remove('d-none');
+      mensajeDiv.classList.remove('alert-success');
+      mensajeDiv.classList.add('alert-danger');
+      mensajeDiv.textContent = 'Error al conectar con el servidor. Por favor, intenta de nuevo.';
+      
+      btnRegistro.disabled = false;
+      btnRegistro.innerHTML = 'Registrarse';
+    }
+  });
+  </script>
 </body>
 </html>
-

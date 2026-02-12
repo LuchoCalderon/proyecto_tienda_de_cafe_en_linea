@@ -1,3 +1,7 @@
+<?php
+session_start();
+$usuarioAutenticado = isset($_SESSION['usuario_id']);
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,8 +12,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 <link rel="stylesheet" href="styles.css">
 <style>
-  
-  
   .hero-section {
     background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('images/cafe.jpeg');
     background-size: cover;
@@ -21,19 +23,19 @@
   
   .plan-card {
     transition: transform 0.3s ease, box-shadow 0.3s ease;
-    border-radius: 10px;
+    border-radius: 15px;
     overflow: hidden;
     height: 100%;
-    border: none;
+    border: 2px solid #e9ecef;
   }
   
   .plan-card:hover {
     transform: translateY(-10px);
-    box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    box-shadow: 0 15px 30px rgba(0,0,0,0.2);
   }
   
   .plan-card.featured {
-    border: 2px solid var(--coffee-brown);
+    border: 3px solid var(--coffee-brown);
     position: relative;
   }
   
@@ -47,12 +49,13 @@
     font-size: 0.8rem;
     font-weight: 600;
     border-bottom-left-radius: 10px;
+    z-index: 1;
   }
   
   .plan-header {
-    background-color: var(--coffee-brown);
+    background: linear-gradient(135deg, var(--coffee-brown) 0%, #4a2c1a 100%);
     color: white;
-    padding: 20px;
+    padding: 30px 20px;
     text-align: center;
   }
   
@@ -66,12 +69,22 @@
     font-weight: 400;
   }
   
+  .savings-badge {
+    background-color: #28a745;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    display: inline-block;
+    margin-top: 10px;
+  }
+  
   .plan-features {
-    padding: 20px;
+    padding: 30px 20px;
   }
   
   .plan-feature {
-    padding: 10px 0;
+    padding: 12px 0;
     border-bottom: 1px solid #eee;
     display: flex;
     align-items: center;
@@ -84,431 +97,443 @@
   .feature-icon {
     color: var(--coffee-brown);
     margin-right: 10px;
+    font-size: 1.2rem;
   }
   
-  .testimonial-quote {
-    position: relative;
-    padding: 20px;
-    background: #f9f9f9;
+  .benefit-icon {
+    width: 60px;
+    height: 60px;
+    background-color: var(--coffee-brown);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.8rem;
+    margin: 0 auto 15px;
+  }
+  
+  .product-selector {
+    max-height: 400px;
+    overflow-y: auto;
+  }
+  
+  .product-item {
+    border: 2px solid #e9ecef;
     border-radius: 10px;
+    padding: 15px;
+    margin-bottom: 10px;
+    transition: all 0.3s;
   }
   
-  .testimonial-quote::before {
-    content: '"';
-    position: absolute;
-    top: 10px;
-    left: 10px;
-    font-size: 4rem;
-    color: var(--coffee-brown);
-    opacity: 0.2;
-    line-height: 1;
-  }
-  
-  .faq-section .accordion-button:not(.collapsed) {
-    background-color: rgba(111, 78, 55, 0.1);
-    color: var(--coffee-brown);
-  }
-  
-  .faq-section .accordion-button:focus {
+  .product-item.selected {
     border-color: var(--coffee-brown);
-    box-shadow: 0 0 0 0.25rem rgba(111, 78, 55, 0.25);
+    background-color: #fdfbf7;
+  }
+  
+  .product-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 8px;
   }
 </style>
 </head>
 <body>
-<!-- Navbar -->
 <?php include 'includes/navbar.php'; ?>
 
 <!-- Hero Section -->
 <section class="hero-section text-center">
   <div class="container">
-    <h1 class="display-4 fw-bold mb-4">Suscríbete a la mejor experiencia de café</h1>
-    <p class="lead fw-bold mb-5">En cualquier lugar colombia, recibe café recién tostado o molido, directamente en tu puerta. 
-      <br>Clientes locales podran disfutar nuestra variedad de bebidas frias y calientes a base de café. 
-      <br>Sin complicaciones, sin quedarte sin café. </p>
+    <h1 class="display-4 fw-bold mb-4">Planes de Suscripción</h1>
+    <p class="lead mb-4">Recibe tu café favorito automáticamente con un 10% de descuento</p>
+    <p class="fs-5"><i class="bi bi-truck"></i> Envío gratis | <i class="bi bi-x-circle"></i> Cancela cuando quieras | <i class="bi bi-tag-fill"></i> 10% de ahorro</p>
   </div>
 </section>
 
-<!-- Planes de Suscripción -->
+<!-- Planes -->
 <section class="container mb-5">
-  <div class="text-center mb-5">
-    <h2 class="coffee-title mb-3">Nuestros Planes de Suscripción</h2>
-    <p class="lead text-muted">Elige el plan que mejor se adapte a tus necesidades y disfruta de café premium en cada taza.</p>
-  </div>
-  
   <div class="row g-4">
-    <!-- Plan Básico -->
-    <div class="col-lg-4">
-      <div class="card plan-card h-100 shadow">
+    <!-- Plan Semanal -->
+    <div class="col-md-4">
+      <div class="card plan-card">
         <div class="plan-header">
-          <h3 class="mb-3">Plan Básico</h3>
-          <div class="plan-price mb-0">$29.900<small>/mes</small></div>
+          <h3 class="mb-2">Semanal</h3>
+          <div class="plan-price">$36.000 <small>/semana</small></div>
+          <div class="savings-badge">
+            <i class="bi bi-tag-fill"></i> Ahorras $4.000/semana
+          </div>
         </div>
         <div class="plan-features">
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>250g de café mensual</span>
+            <span>Entrega cada 7 días</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>1 tipo de café por envío</span>
+            <span>10% de descuento automático</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>Envío estándar incluido</span>
+            <span>Envío gratis</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>Acceso a cafés exclusivos</span>
+            <span>Cancela en cualquier momento</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>Puedes cancelar en cualquier momento</span>
-          </div>
-          <div class="plan-feature">
-            <i class="bi bi-x-circle-fill text-muted feature-icon"></i>
-            <span class="text-muted">Sin accesorios incluidos</span>
+            <span>Modifica productos fácilmente</span>
           </div>
         </div>
-        <div class="card-footer bg-white border-0 text-center p-4">
-          <a href="#" class="btn btn-outline-primary btn-lg w-100">Suscribirme</a>
+        <div class="card-footer bg-white p-3">
+          <button class="btn btn-primary w-100" onclick="iniciarSuscripcion('semanal')">
+            <i class="bi bi-calendar-check"></i> Suscribirme
+          </button>
         </div>
       </div>
     </div>
     
-    <!-- Plan Premium (Destacado) -->
-    <div class="col-lg-4">
-      <div class="card plan-card featured h-100 shadow">
-        <div class="featured-badge">Más Popular</div>
+    <!-- Plan Quincenal - Destacado -->
+    <div class="col-md-4">
+      <div class="card plan-card featured">
+        <span class="featured-badge">MÁS POPULAR</span>
         <div class="plan-header">
-          <h3 class="mb-3">Plan Premium</h3>
-          <div class="plan-price mb-0">$49.900<small>/mes</small></div>
+          <h3 class="mb-2">Quincenal</h3>
+          <div class="plan-price">$63.000 <small>/quincena</small></div>
+          <div class="savings-badge">
+            <i class="bi bi-tag-fill"></i> Ahorras $7.000/quincena
+          </div>
         </div>
         <div class="plan-features">
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>500g de café mensual</span>
+            <span>Entrega cada 15 días</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>2 tipos de café por envío</span>
+            <span>10% de descuento automático</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>Envío express incluido</span>
+            <span>Envío gratis</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>Acceso a cafés exclusivos</span>
+            <span>Cancela en cualquier momento</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>Puedes cancelar en cualquier momento</span>
-          </div>
-          <div class="plan-feature">
-            <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>Accesorio sorpresa cada 3 meses</span>
+            <span>Equilibrio perfecto de frescura</span>
           </div>
         </div>
-        <div class="card-footer bg-white border-0 text-center p-4">
-          <a href="#" class="btn btn-outline-primary btn-lg w-100">Suscribirme</a>
+        <div class="card-footer bg-white p-3">
+          <button class="btn btn-primary w-100" onclick="iniciarSuscripcion('quincenal')">
+            <i class="bi bi-calendar-check"></i> Suscribirme
+          </button>
         </div>
       </div>
     </div>
     
-    <!-- Plan Barista -->
-    <div class="col-lg-4">
-      <div class="card plan-card h-100 shadow">
+    <!-- Plan Mensual -->
+    <div class="col-md-4">
+      <div class="card plan-card">
         <div class="plan-header">
-          <h3 class="mb-3">Plan Barista</h3>
-          <div class="plan-price mb-0">$79.900<small>/mes</small></div>
+          <h3 class="mb-2">Mensual</h3>
+          <div class="plan-price">$108.000 <small>/mes</small></div>
+          <div class="savings-badge">
+            <i class="bi bi-tag-fill"></i> Ahorras $12.000/mes
+          </div>
         </div>
         <div class="plan-features">
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>1kg de café mensual</span>
+            <span>Entrega cada 30 días</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>3 tipos de café por envío</span>
+            <span>10% de descuento automático</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>Envío express incluido</span>
+            <span>Envío gratis</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>Acceso a cafés exclusivos y ediciones limitadas</span>
+            <span>Cancela en cualquier momento</span>
           </div>
           <div class="plan-feature">
             <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>Puedes cancelar en cualquier momento</span>
-          </div>
-          <div class="plan-feature">
-            <i class="bi bi-check-circle-fill feature-icon"></i>
-            <span>Accesorio premium garantizado cada mes</span>
+            <span>Mayor ahorro mensual</span>
           </div>
         </div>
-        <div class="card-footer bg-white border-0 text-center p-4">
-          <a href="#" class="btn btn-outline-primary btn-lg w-100">Suscribirme</a>
+        <div class="card-footer bg-white p-3">
+          <button class="btn btn-primary w-100" onclick="iniciarSuscripcion('mensual')">
+            <i class="bi bi-calendar-check"></i> Suscribirme
+          </button>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- Cómo Funciona -->
+<!-- Beneficios -->
 <section class="container mb-5">
-  <div class="text-center mb-5">
-    <h2 class="coffee-title mb-3">¿Cómo Funciona?</h2>
-    <p class="lead text-muted">Es sencillo, flexible y está diseñado pensando en ti.</p>
-  </div>
-  
-  <div class="row g-4">
-    <div class="col-md-3 text-center">
-      <div class="mb-3">
-        <div class="bg-light p-3 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-          <i class="bi bi-cup-hot fs-1 text-primary"></i>
-        </div>
+  <h2 class="coffee-title text-center mb-5">¿Por qué suscribirse?</h2>
+  <div class="row g-4 text-center">
+    <div class="col-md-3">
+      <div class="benefit-icon">
+        <i class="bi bi-tag-fill"></i>
       </div>
-      <h4>Elige tu Plan</h4>
-      <p>Selecciona el plan que mejor se adapte a tus hábitos de consumo de café.</p>
+      <h5>Ahorra 10%</h5>
+      <p class="text-muted">Descuento automático en todos tus productos</p>
     </div>
-    
-    <div class="col-md-3 text-center">
-      <div class="mb-3">
-        <div class="bg-light p-3 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-          <i class="bi bi-sliders fs-1 text-primary"></i>
-        </div>
+    <div class="col-md-3">
+      <div class="benefit-icon">
+        <i class="bi bi-truck"></i>
       </div>
-      <h4>Personaliza</h4>
-      <p>Elige tus preferencias de café, método de preparación y frecuencia de entrega.</p>
+      <h5>Envío Gratis</h5>
+      <p class="text-muted">Sin costos adicionales de envío</p>
     </div>
-    
-    <div class="col-md-3 text-center">
-      <div class="mb-3">
-        <div class="bg-light p-3 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-          <i class="bi bi-truck fs-1 text-primary"></i>
-        </div>
+    <div class="col-md-3">
+      <div class="benefit-icon">
+        <i class="bi bi-calendar-check"></i>
       </div>
-      <h4>Recibe</h4>
-      <p>Disfruta de tu café recién tostado directamente en la puerta de tu casa.</p>
+      <h5>Entregas Automáticas</h5>
+      <p class="text-muted">Nunca te quedarás sin café</p>
     </div>
-    
-    <div class="col-md-3 text-center">
-      <div class="mb-3">
-        <div class="bg-light p-3 rounded-circle d-inline-flex align-items-center justify-content-center" style="width: 80px; height: 80px;">
-          <i class="bi bi-arrow-repeat fs-1 text-primary"></i>
-        </div>
+    <div class="col-md-3">
+      <div class="benefit-icon">
+        <i class="bi bi-x-circle"></i>
       </div>
-      <h4>Ajusta</h4>
-      <p>Cambia, pausa o cancela tu suscripción en cualquier momento sin compromiso.</p>
+      <h5>Sin Compromiso</h5>
+      <p class="text-muted">Cancela cuando quieras</p>
     </div>
   </div>
 </section>
 
-<!-- Personalización -->
-<section class="bg-light py-5 mb-5">
-  <div class="container">
-    <div class="row align-items-center">
-      <div class="col-lg-6 mb-4 mb-lg-0">
-        <h2 class="coffee-title mb-4">Personaliza tu experiencia</h2>
-        <p class="lead mb-4">Cada suscripción puede ser adaptada a tus gustos y preferencias.</p>
-        
-        <div class="mb-4">
-          <h5 class="mb-3"><i class="bi bi-cup-fill me-2 text-primary"></i> Tipo de café</h5>
-          <p>Elige entre nuestros orígenes únicos o mezclas exclusivas. Puedes cambiar tu selección en cada envío.</p>
-        </div>
-        
-        <div class="mb-4">
-          <h5 class="mb-3"><i class="bi bi-gear-fill me-2 text-primary"></i> Tipo de molienda</h5>
-          <p>Selecciona el tipo de molienda según tu método de preparación: grano entero, gruesa, media o fina.</p>
-        </div>
-        
-        <div>
-          <h5 class="mb-3"><i class="bi bi-calendar-check me-2 text-primary"></i> Frecuencia de entrega</h5>
-          <p>Elige recibir tu café cada semana, cada dos semanas o mensualmente. Ajusta según tu consumo.</p>
-        </div>
+<!-- Modal Seleccionar Productos -->
+<div class="modal fade" id="modalSuscripcion" tabindex="-1" data-bs-backdrop="static">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Selecciona tus Productos</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       </div>
-      <div class="col-lg-6">
-        <img src="images/personalizacioCafe.png" alt="Personalización de café" class="img-fluid rounded shadow">
+      <div class="modal-body">
+        <div class="alert alert-info">
+          <strong>Plan <span id="planNombre"></span></strong><br>
+          <i class="bi bi-tag-fill"></i> 10% de descuento aplicado automáticamente
+        </div>
+        
+        <h6 class="mb-3">Productos Disponibles:</h6>
+        <div id="productosDisponibles" class="product-selector">
+          <div class="text-center py-5">
+            <div class="spinner-border text-primary"></div>
+            <p class="mt-2">Cargando productos...</p>
+          </div>
+        </div>
+        
+        <hr>
+        
+        <div class="d-flex justify-content-between align-items-center">
+          <div>
+            <strong>Total Original:</strong> <span id="totalOriginal" class="text-muted text-decoration-line-through">$0</span><br>
+            <strong>Descuento 10%:</strong> <span id="descuento" class="text-success">-$0</span><br>
+            <h5 class="mb-0 mt-2">Total: <span id="totalFinal" class="text-primary">$0</span></h5>
+          </div>
+          <button class="btn btn-primary btn-lg" id="btnConfirmarSuscripcion" disabled>
+            <i class="bi bi-check-circle"></i> Confirmar Suscripción
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- Testimonios -->
-<section class="container mb-5">
-  <div class="text-center mb-5">
-    <h2 class="coffee-title mb-3">Lo que dicen nuestros suscriptores</h2>
-    <p class="lead text-muted">Conoce las experiencias de quienes ya disfrutan de nuestro servicio de suscripción.</p>
-  </div>
-  
-  <div class="row g-4">
-    <div class="col-md-4">
-      <div class="card h-100 border-0 shadow">
-        <div class="card-body">
-          <div class="testimonial-quote mb-3">
-            <p>"Llevo 2 meses con la suscripción Premium y ha sido una experiencia increíble. El café siempre llega recién tostado y los accesorios sorpresa son de gran calidad. ¡No puedo imaginar mis mañanas sin Café Aroma!"</p>
-          </div>
-          <div class="d-flex align-items-center">
-            <img src="images/persona2.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
-            <div>
-              <h6 class="mb-0">Ana Martínez</h6>
-              <div class="star-rating text-warning">
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-md-4">
-      <div class="card h-100 border-0 shadow">
-        <div class="card-body">
-          <div class="testimonial-quote mb-3">
-            <p>"Como barista aficionado, el Plan Barista ha sido un descubrimiento fascinante. He podido probar variedades de café que no encontraría en ninguna tienda local. La flexibilidad para cambiar mis preferencias es lo que más valoro."</p>
-          </div>
-          <div class="d-flex align-items-center">
-            <img src="images/persona3.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
-            <div>
-              <h6 class="mb-0">Javier López</h6>
-              <div class="star-rating text-warning">
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-half"></i>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-    
-    <div class="col-md-4">
-      <div class="card h-100 border-0 shadow">
-        <div class="card-body">
-          <div class="testimonial-quote mb-3">
-            <p>"Empecé con el Plan Básico y ahora estoy en el Premium. La diferencia en calidad comparado con el café de supermercado es abismal. Además, el servicio al cliente es excelente y siempre responden rápidamente a cualquier consulta."</p>
-          </div>
-          <div class="d-flex align-items-center">
-            <img src="images/persona1.png" class="rounded-circle me-3" width="50" height="50" alt="Cliente">
-            <div>
-              <h6 class="mb-0">Carlos Rodríguez</h6>
-              <div class="star-rating text-warning">
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-                <i class="bi bi-star-fill"></i>
-              </div>
-            </div>
-          </div>
+<!-- Modal Confirmación -->
+<div class="modal fade" id="modalConfirmacion" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-body text-center py-5">
+        <i class="bi bi-check-circle-fill text-success" style="font-size: 4rem;"></i>
+        <h3 class="mt-3">¡Suscripción Creada!</h3>
+        <p class="mb-3">Tu suscripción ha sido activada exitosamente</p>
+        <p class="text-muted">Próximo envío: <strong id="proximoEnvio"></strong></p>
+        <div class="d-grid gap-2">
+          <a href="misSuscripciones.php" class="btn btn-primary">Ver Mis Suscripciones</a>
+          <a href="home.php" class="btn btn-outline-secondary">Ir al Inicio</a>
         </div>
       </div>
     </div>
   </div>
-</section>
+</div>
 
-<!-- Preguntas Frecuentes -->
-<section class="container mb-5 faq-section">
-  <div class="text-center mb-5">
-    <h2 class="coffee-title mb-3">Preguntas Frecuentes</h2>
-    <p class="lead text-muted">Resolvemos tus dudas sobre nuestros planes de suscripción.</p>
-  </div>
-  
-  <div class="row justify-content-center">
-    <div class="col-lg-10">
-      <div class="accordion" id="faqAccordion">
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingOne">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-              ¿Puedo cancelar mi suscripción en cualquier momento?
-            </button>
-          </h2>
-          <div id="collapseOne" class="accordion-collapse collapse show" aria-labelledby="headingOne" data-bs-parent="#faqAccordion">
-            <div class="accordion-body">
-              Sí, puedes cancelar tu suscripción en cualquier momento sin penalización. Simplemente accede a tu cuenta, ve a la sección "Mis Suscripciones" y selecciona la opción de cancelar. La cancelación se hará efectiva para el siguiente ciclo de facturación.
-            </div>
-          </div>
-        </div>
-        
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingTwo">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-              ¿Cómo puedo cambiar mis preferencias de café?
-            </button>
-          </h2>
-          <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#faqAccordion">
-            <div class="accordion-body">
-              Puedes cambiar tus preferencias en cualquier momento desde tu cuenta. Ve a "Mis Suscripciones", selecciona la suscripción que deseas modificar y ajusta tus preferencias. Los cambios se aplicarán en tu próximo envío, siempre que los realices al menos 48 horas antes de la fecha programada de procesamiento.
-            </div>
-          </div>
-        </div>
-        
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingThree">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-              ¿Cuál es la política de envío?
-            </button>
-          </h2>
-          <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#faqAccordion">
-            <div class="accordion-body">
-              El costo de envío está incluido en todos nuestros planes de suscripción. Los envíos estándar (Plan Básico) toman entre 3-5 días hábiles, mientras que los envíos express (Planes Premium y Barista) toman 1-2 días hábiles. Actualmente enviamos a todas las principales ciudades de Colombia.
-            </div>
-          </div>
-        </div>
-        
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingFour">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-              ¿Qué pasa si no estoy en casa cuando llega mi pedido?
-            </button>
-          </h2>
-          <div id="collapseFour" class="accordion-collapse collapse" aria-labelledby="headingFour" data-bs-parent="#faqAccordion">
-            <div class="accordion-body">
-              Nuestro servicio de mensajería intentará entregar tu pedido hasta en dos ocasiones. Si después de los intentos no pudieron entregarlo, el paquete se dejará en el punto de recogida más cercano y recibirás una notificación con las instrucciones para recogerlo.
-            </div>
-          </div>
-        </div>
-        
-        <div class="accordion-item">
-          <h2 class="accordion-header" id="headingFive">
-            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-              ¿Puedo regalar una suscripción?
-            </button>
-          </h2>
-          <div id="collapseFive" class="accordion-collapse collapse" aria-labelledby="headingFive" data-bs-parent="#faqAccordion">
-            <div class="accordion-body">
-              ¡Sí! Ofrecemos suscripciones de regalo por 3, 6 o 12 meses. Puedes personalizar la fecha de inicio y enviar un mensaje personalizado. El destinatario recibirá un correo electrónico con todos los detalles para configurar sus preferencias, pero no verá el precio que pagaste.
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- CTA Final -->
-<section class="bg-primary text-white py-5">
-  <div class="container text-center">
-    <h2 class="mb-4">¿Listo para disfrutar del mejor café cada mes?</h2>
-    <p class="lead mb-4">Únete a nuestra comunidad de amantes del café y descubre un mundo de sabores.</p>
-    <a href="#" class="btn btn-light btn-lg">Comenzar mi suscripción</a>
-  </div>
-</section>
-
-<!-- Footer -->
 <?php include 'includes/footer.php'; ?>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+const usuarioAutenticado = <?php echo $usuarioAutenticado ? 'true' : 'false'; ?>;
+let frecuenciaSeleccionada = '';
+let productosSeleccionados = [];
+let productosDisponibles = [];
 
-<script src="script.js"></script>
+function formatPrice(price) {
+  return '$' + Number(price).toLocaleString('es-CO');
+}
+
+function iniciarSuscripcion(frecuencia) {
+  if (!usuarioAutenticado) {
+    alert('Debes iniciar sesión para suscribirte');
+    window.location.href = 'login.php';
+    return;
+  }
+  
+  frecuenciaSeleccionada = frecuencia;
+  const nombresFrecuencia = {
+    'semanal': 'Semanal',
+    'quincenal': 'Quincenal',
+    'mensual': 'Mensual'
+  };
+  document.getElementById('planNombre').textContent = nombresFrecuencia[frecuencia];
+  
+  productosSeleccionados = [];
+  cargarProductos();
+  new bootstrap.Modal(document.getElementById('modalSuscripcion')).show();
+}
+
+async function cargarProductos() {
+  try {
+    const response = await fetch(basePath + 'php/catalogo_api.php?porPagina=100');
+    const data = await response.json();
+    
+    if (data.success && data.data) {
+      productosDisponibles = data.data;
+      renderProductos();
+    }
+  } catch (e) {
+    console.error('Error al cargar productos:', e);
+  }
+}
+
+function renderProductos() {
+  const container = document.getElementById('productosDisponibles');
+  container.innerHTML = '';
+  
+  productosDisponibles.forEach(prod => {
+    const isSelected = productosSeleccionados.find(p => p.productoId === prod.id);
+    const imgSrc = prod.imagen || 'images/placeholder.png';
+    
+    const div = document.createElement('div');
+    div.className = `product-item ${isSelected ? 'selected' : ''}`;
+    div.innerHTML = `
+      <div class="d-flex align-items-center">
+        <img src="${imgSrc}" alt="${prod.nombre}" onerror="this.src='images/placeholder.png'">
+        <div class="flex-grow-1 mx-3">
+          <h6 class="mb-1">${prod.nombre}</h6>
+          <p class="mb-0 text-muted small">${prod.categoriaNombre || ''}</p>
+          <strong>${formatPrice(prod.precio)}</strong>
+        </div>
+        <div class="d-flex align-items-center">
+          ${isSelected ? `
+            <button class="btn btn-sm btn-outline-secondary me-2" onclick="cambiarCantidad(${prod.id}, -1)">
+              <i class="bi bi-dash"></i>
+            </button>
+            <span class="mx-2 fw-bold">${isSelected.cantidad}</span>
+            <button class="btn btn-sm btn-outline-secondary" onclick="cambiarCantidad(${prod.id}, 1)">
+              <i class="bi bi-plus"></i>
+            </button>
+          ` : `
+            <button class="btn btn-sm btn-primary" onclick="agregarProducto(${prod.id})">
+              <i class="bi bi-plus-circle"></i> Agregar
+            </button>
+          `}
+        </div>
+      </div>`;
+    
+    container.appendChild(div);
+  });
+  
+  actualizarTotales();
+}
+
+function agregarProducto(productoId) {
+  productosSeleccionados.push({ productoId, cantidad: 1 });
+  renderProductos();
+}
+
+function cambiarCantidad(productoId, delta) {
+  const index = productosSeleccionados.findIndex(p => p.productoId === productoId);
+  if (index !== -1) {
+    productosSeleccionados[index].cantidad += delta;
+    if (productosSeleccionados[index].cantidad <= 0) {
+      productosSeleccionados.splice(index, 1);
+    }
+  }
+  renderProductos();
+}
+
+function actualizarTotales() {
+  let total = 0;
+  productosSeleccionados.forEach(item => {
+    const prod = productosDisponibles.find(p => p.id === item.productoId);
+    if (prod) {
+      total += prod.precio * item.cantidad;
+    }
+  });
+  
+  const descuento = total * 0.1;
+  const totalFinal = total - descuento;
+  
+  document.getElementById('totalOriginal').textContent = formatPrice(total);
+  document.getElementById('descuento').textContent = '-' + formatPrice(descuento);
+  document.getElementById('totalFinal').textContent = formatPrice(totalFinal);
+  
+  document.getElementById('btnConfirmarSuscripcion').disabled = productosSeleccionados.length === 0;
+}
+
+document.getElementById('btnConfirmarSuscripcion')?.addEventListener('click', async function() {
+  const btn = this;
+  const btnText = btn.innerHTML;
+  btn.disabled = true;
+  btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Procesando...';
+  
+  try {
+    const formData = new FormData();
+    formData.append('action', 'create');
+    formData.append('frecuencia', frecuenciaSeleccionada);
+    formData.append('productos', JSON.stringify(productosSeleccionados));
+    
+    const response = await fetch(basePath + 'php/suscripciones_api.php', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await response.json();
+    
+    if (data.success) {
+      bootstrap.Modal.getInstance(document.getElementById('modalSuscripcion')).hide();
+      
+      // Formatear fecha
+      const fecha = new Date(data.fechaProximoEnvio);
+      document.getElementById('proximoEnvio').textContent = fecha.toLocaleDateString('es-CO', {
+        day: '2-digit',
+        month: 'long',
+        year: 'numeric'
+      });
+      
+      new bootstrap.Modal(document.getElementById('modalConfirmacion')).show();
+    } else {
+      alert('Error: ' + data.message);
+      btn.disabled = false;
+      btn.innerHTML = btnText;
+    }
+  } catch (e) {
+    alert('Error al crear suscripción');
+    btn.disabled = false;
+    btn.innerHTML = btnText;
+  }
+});
+</script>
 </body>
 </html>
-

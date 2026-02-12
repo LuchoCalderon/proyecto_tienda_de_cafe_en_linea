@@ -1,31 +1,91 @@
-<!DOCTYPE html>
-<html lang="es">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Café en Línea - Tienda de Café Premium</title>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
-<link rel="stylesheet" href="styles.css">
+<?php
+// Verificar si hay una sesión activa
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
+// Verificar si el usuario está autenticado
+$usuarioAutenticado = isset($_SESSION['usuario_id']);
+$nombreUsuario = $usuarioAutenticado ? $_SESSION['usuario_nombre'] : '';
+$rolUsuario = $usuarioAutenticado ? $_SESSION['usuario_rol'] : '';
+
+// Obtener la página actual para marcar el menú activo
+$paginaActual = basename($_SERVER['PHP_SELF']);
+?>
 
 <style>
-   .navbar {
+  .navbar {
     background-color: var(--dark-brown);
   }
   
   .navbar-brand, .nav-link {
-    color: var(--cream);
+    color: var(--cream) !important;
+  }
+  
+  .nav-link {
+    position: relative;
+    transition: all 0.3s ease;
+    border-radius: 6px;
+    margin: 0 2px;
   }
   
   .nav-link:hover {
-    color: #fff;
+    background-color: rgba(255, 255, 255, 0.15);
+    color: #fff !important;
+  }
+  
+  /* Estilo para el link activo - recuadro con tono más claro */
+  .nav-link.active {
+    background-color: rgba(255, 255, 255, 0.2);
+    color: #fff !important;
+    font-weight: 500;
+  }
+  
+  /* Animación suave al hacer hover sobre el link activo */
+  .nav-link.active:hover {
+    background-color: rgba(255, 255, 255, 0.25);
   }
   
   .search-form {
     max-width: 400px;
   }
   
+  .dropdown-menu {
+    background-color: #fff;
+  }
+  
+  .dropdown-item {
+    color: #333;
+  }
+  
+  .dropdown-item:hover {
+    background-color: var(--dark-brown, #4a2511);
+    color: #fff;
+  }
+  
+  .cart-badge {
+    position: relative;
+    top: -8px;
+    background-color: #dc3545;
+    color: white;
+    border-radius: 10px;
+    padding: 2px 6px;
+    font-size: 0.7rem;
+    margin-left: 3px;
+    display: none;
+  }
+  
+  /* Asegurar que el texto del navbar siempre sea claro */
+  .navbar-nav .nav-link,
+  .navbar-nav .nav-link.active {
+    color: var(--cream, #f5f5dc) !important;
+  }
+  
+  .navbar-nav .nav-link:hover {
+    color: #ffffff !important;
+  }
 </style>
+
 <!-- Navbar -->
 <nav class="navbar navbar-expand-lg sticky-top">
   <div class="container">
@@ -36,38 +96,111 @@
     <div class="collapse navbar-collapse" id="navbarNav">
       <ul class="navbar-nav me-auto">
         <li class="nav-item">
-          <a class="nav-link active" href="home.php">Inicio</a>
+          <a class="nav-link <?php echo ($paginaActual == 'home.php') ? 'active' : ''; ?>" href="home.php">Inicio</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="catalogo.php">Catálogo</a>
+          <a class="nav-link <?php echo ($paginaActual == 'catalogo.php') ? 'active' : ''; ?>" href="catalogo.php">Catálogo</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="planesSuscripcion.php">Suscripciones</a>
+          <a class="nav-link <?php echo ($paginaActual == 'planesSuscripcion.php' || $paginaActual == 'misSuscripciones.php') ? 'active' : ''; ?>" href="planesSuscripcion.php">Suscripciones</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="SobreNosotros.php">Sobre Nosotros</a>
+          <a class="nav-link <?php echo (strtolower($paginaActual) == 'sobrenosotros.php') ? 'active' : ''; ?>" href="sobreNosotros.php">Sobre Nosotros</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="contactenos.php">Contacto</a>
+          <a class="nav-link <?php echo ($paginaActual == 'contactenos.php') ? 'active' : ''; ?>" href="contactenos.php">Contacto</a>
         </li>
       </ul>
-      <form class="d-flex search-form">
-        <input class="form-control me-2" type="search" placeholder="Buscar productos..." aria-label="Search">
-        <button class="btn btn-outline-light" type="submit"><i class="bi bi-search"></i></button>
+      
+      <!-- Formulario de búsqueda -->
+      <form class="d-flex search-form me-3" id="formBusquedaNavbar" onsubmit="return buscarDesdeNavbar()">
+        <input type="text" class="form-control" id="inputBusquedaNavbar" placeholder="Buscar productos..." aria-label="Buscar productos">
+        <button class="btn btn-outline-light" type="submit">
+          <i class="bi bi-search"></i>
+        </button>
       </form>
+      
       <ul class="navbar-nav ms-auto">
+        <?php if ($usuarioAutenticado): ?>
+          <!-- Usuario autenticado: Mostrar nombre del usuario con dropdown -->
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownUser" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+              <i class="bi bi-person-circle"></i> <?php echo htmlspecialchars($nombreUsuario); ?>
+            </a>
+            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownUser">
+              <?php if ($rolUsuario === 'administrador'): ?>
+                <li><a class="dropdown-item" href="administrador.php"><i class="bi bi-speedometer2"></i> Panel de Administración</a></li>
+              <?php else: ?>
+                <li><a class="dropdown-item" href="perfilUsuario.php"><i class="bi bi-person"></i> Mi Perfil</a></li>
+                <li><a class="dropdown-item" href="historialOrdenes.php"><i class="bi bi-clock-history"></i> Mis Pedidos</a></li>
+              <?php endif; ?>
+              <li><hr class="dropdown-divider"></li>
+              <li><a class="dropdown-item text-danger" href="php/logout.php"><i class="bi bi-box-arrow-right"></i> Cerrar Sesión</a></li>
+            </ul>
+          </li>
+        <?php else: ?>
+          <!-- Usuario NO autenticado: Mostrar link de Iniciar Sesión -->
+          <li class="nav-item">
+            <a class="nav-link" href="login.php"><i class="bi bi-person"></i> Iniciar Sesión</a>
+          </li>
+        <?php endif; ?>
         <li class="nav-item">
-          <a class="nav-link" href="login.php"><i class="bi bi-person"></i> Iniciar Sesión</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="carritoCompra.php"><i class="bi bi-cart"></i> Carrito (0)</a>
+          <a class="nav-link <?php echo ($paginaActual == 'carritoCompra.php') ? 'active' : ''; ?>" href="carritoCompra.php">
+            <i class="bi bi-cart"></i> Carrito
+            <span class="cart-badge" id="cartBadgeNavbar">0</span>
+          </a>
         </li>
       </ul>
     </div>
   </div>
 </nav>
 
-<script src="script.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+// Función para buscar desde el navbar
+function buscarDesdeNavbar() {
+  const query = document.getElementById('inputBusquedaNavbar').value.trim();
+  
+  // Si estamos en la página del catálogo, no redirigir, solo buscar
+  if (window.location.pathname.includes('catalogo.php')) {
+    // Si existe la función cargarProductos del catálogo, úsala
+    if (typeof filtros !== 'undefined' && typeof cargarProductos === 'function') {
+      filtros.busqueda = query;
+      filtros.pagina = 1;
+      cargarProductos();
+      // Actualizar también el input de búsqueda del catálogo si existe
+      const inputCatalogo = document.getElementById('inputBusqueda');
+      if (inputCatalogo) {
+        inputCatalogo.value = query;
+      }
+    }
+  } else {
+    // Si estamos en otra página, redirigir al catálogo con el parámetro de búsqueda
+    if (query) {
+      window.location.href = 'catalogo.php?busqueda=' + encodeURIComponent(query);
+    } else {
+      window.location.href = 'catalogo.php';
+    }
+  }
+  
+  return false; // Prevenir el submit normal del formulario
+}
 
-</html>
+// Actualizar el badge del carrito cuando cargue la página
+document.addEventListener('DOMContentLoaded', async function() {
+  const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+  
+  try {
+    const response = await fetch(basePath + 'php/carrito_api.php?action=count');
+    const data = await response.json();
+    if (data.success && data.count > 0) {
+      const badge = document.getElementById('cartBadgeNavbar');
+      if (badge) {
+        badge.textContent = data.count;
+        badge.style.display = 'inline-block';
+      }
+    }
+  } catch(e) {
+    // Si hay error, no mostrar nada
+  }
+});
+</script>

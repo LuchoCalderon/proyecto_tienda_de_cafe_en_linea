@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html>
+<head><title>Avatar</title></head>
+<body>
+<canvas id="canvas" width="200" height="200"></canvas>
+<script>
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+
+// Fondo café
+ctx.fillStyle = '#8B4513';
+ctx.fillRect(0, 0, 200, 200);
+
+// Cabeza
+ctx.fillStyle = '#F5DEB3';
+ctx.beginPath();
+ctx.arc(100, 70, 35, 0, Math.PI * 2);
+ctx.fill();
+
+// Cuerpo
+ctx.beginPath();
+ctx.arc(100, 140, 60, Math.PI, 0);
+ctx.fill();
+
+// Convertir a imagen
+canvas.toBlob(blob => {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'default-avatar.png';
+    a.click();
+});
+</script>
+</body>
+</html>

@@ -1,3 +1,11 @@
+
+<?php
+/**
+ * IMPORTANTE: session_start() DEBE IR PRIMERO
+ * Antes de cualquier salida HTML
+ */
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -8,8 +16,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 <link rel="stylesheet" href="styles.css">
 <style>
-  
-  
   .hero-section {
     background-image: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), url('images/cafe.jpeg');
     background-size: cover;
@@ -500,6 +506,7 @@
 <!-- Footer -->
 <?php include 'includes/footer.php'; ?>
 
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
 <script src="script.js"></script>
 </body>

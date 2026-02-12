@@ -1,15 +1,23 @@
+<?php
+require_once 'php/check_auth.php';
+verificarAutenticacion();
+
+$pedidoId = intval($_GET['id'] ?? 0);
+if ($pedidoId <= 0) {
+    header('Location: historialOrdenes.php');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Café Aroma - Detalle de Pedido</title>
+<title>Detalle del Pedido - Café en Línea</title>
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css">
 <link rel="stylesheet" href="styles.css">
 <style>
-  
-  
   .profile-sidebar {
     background-color: #f8f9fa;
     border-radius: 10px;
@@ -49,21 +57,46 @@
   }
   
   .product-image {
-    width: 60px;
-    height: 60px;
+    width: 80px;
+    height: 80px;
     object-fit: cover;
   }
   
   .status-badge {
     border-radius: 20px;
     padding: 8px 12px;
-    font-size: 0.8rem;
+    font-size: 0.9rem;
     font-weight: 600;
   }
   
-  .status-delivered {
+  .status-entregado {
     background-color: #d1e7dd;
     color: #0f5132;
+  }
+  
+  .status-pendiente {
+    background-color: #fff3cd;
+    color: #664d03;
+  }
+  
+  .status-confirmado {
+    background-color: #cff4fc;
+    color: #055160;
+  }
+  
+  .status-en_proceso {
+    background-color: #e7d4ff;
+    color: #59359a;
+  }
+  
+  .status-enviado {
+    background-color: #cfe2ff;
+    color: #084298;
+  }
+  
+  .status-cancelado {
+    background-color: #f8d7da;
+    color: #842029;
   }
   
   .tracking-step {
@@ -103,327 +136,298 @@
     background-color: var(--coffee-brown);
     color: white;
   }
-  
-  .review-stars {
-    color: #ffc107;
-    font-size: 1.5rem;
-  }
-  
-  .review-stars .bi-star {
-    cursor: pointer;
-  }
 </style>
 </head>
 <body>
-<!-- Navbar -->
 <?php include 'includes/navbar.php'; ?>
-
 
 <div class="container py-5">
   <div class="row">
-    <!-- Sidebar de navegación del perfil -->
+    <!-- Sidebar -->
     <div class="col-lg-3 mb-4 mb-lg-0">
       <div class="profile-sidebar p-4">
         <h5 class="coffee-title mb-4">Mi Cuenta</h5>
         
         <nav class="nav flex-column">
-          <a class="nav-link" href="perfilUsuario.html">
+          <a class="nav-link" href="perfilUsuario.php">
             <i class="bi bi-person"></i> Mi Perfil
           </a>
-          <a class="nav-link active" href="#">
+          <a class="nav-link active" href="historialOrdenes.php">
             <i class="bi bi-box-seam"></i> Mis Pedidos
           </a>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="misDirecciones.php">
             <i class="bi bi-geo-alt"></i> Mis Direcciones
           </a>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="metodosPago.php">
             <i class="bi bi-credit-card"></i> Métodos de Pago
           </a>
-          <a class="nav-link" href="#">
-            <i class="bi bi-award"></i> Programa de Lealtad
-          </a>
-          <a class="nav-link" href="#">
+          <a class="nav-link" href="misSuscripciones.php">
             <i class="bi bi-calendar-check"></i> Mis Suscripciones
           </a>
-          <a class="nav-link" href="#">
-            <i class="bi bi-heart"></i> Mis Favoritos
-          </a>
-          <a class="nav-link" href="#">
-            <i class="bi bi-bell"></i> Notificaciones
-          </a>
           <hr>
-          <a class="nav-link text-danger" href="login.php">
+          <a class="nav-link text-danger" href="php/logout.php">
             <i class="bi bi-box-arrow-right"></i> Cerrar Sesión
           </a>
         </nav>
       </div>
     </div>
     
-    <!-- Contenido principal del detalle de pedido -->
+    <!-- Contenido principal -->
     <div class="col-lg-9">
       <nav aria-label="breadcrumb" class="mb-4">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a href="historialOrdenes.html" class="text-decoration-none">Mis Pedidos</a></li>
-          <li class="breadcrumb-item active" aria-current="page">Pedido #ORD-2025-1089</li>
+          <li class="breadcrumb-item"><a href="historialOrdenes.php" class="text-decoration-none">Mis Pedidos</a></li>
+          <li class="breadcrumb-item active" aria-current="page" id="breadcrumbPedido">Cargando...</li>
         </ol>
       </nav>
       
-      <div class="profile-content p-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-          <h2 class="coffee-title mb-0">Detalle del Pedido #ORD-2025-1089</h2>
-          <span class="status-badge status-delivered">Entregado</span>
-        </div>
-        
-        <div class="row mb-4">
-          <div class="col-md-6 mb-3 mb-md-0">
-            <h5>Información del Pedido</h5>
-            <table class="table table-borderless">
-              <tbody>
-                <tr>
-                  <th scope="row" class="ps-0">Número de pedido:</th>
-                  <td>ORD-2025-1089</td>
-                </tr>
-                <tr>
-                  <th scope="row" class="ps-0">Fecha de pedido:</th>
-                  <td>15/03/2025</td>
-                </tr>
-                <tr>
-                  <th scope="row" class="ps-0">Método de pago:</th>
-                  <td>Tarjeta de crédito (****4567)</td>
-                </tr>
-                <tr>
-                  <th scope="row" class="ps-0">Método de envío:</th>
-                  <td>Envío estándar</td>
-                </tr>
-                <tr>
-                  <th scope="row" class="ps-0">Fecha de entrega:</th>
-                  <td>20/03/2025</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-          
-          <div class="col-md-6">
-            <h5>Dirección de Envío</h5>
-            <address>
-              Luis Calderon<br>
-              Calle Principal #123<br>
-              Apto. 502<br>
-              Ciudad, Departamento<br>
-              Código Postal: 110111<br>
-              Teléfono: (310) 123-4567
-            </address>
-          </div>
-        </div>
-        
-        <hr class="my-4">
-        
-        <h5 class="mb-3">Productos</h5>
-        
-        <div class="card border mb-4">
-          <div class="card-body">
-            <div class="row">
-              <div class="col-md-8 mb-3 mb-md-0">
-                <!-- Producto 1 -->
-                <div class="d-flex mb-3">
-                  <img src="images/cafepremium.png" class="product-image rounded me-3" alt="Dripper">
-                  <div>  
-                    </h6>
-                    <p class="text-muted mb-0 small">Café en grano, 500g</p>
-                    <p class="mb-0">$25.000 x 1 = $25.000</p>
-                  </div>
-                </div>
-                
-                <!-- Producto 2 -->
-                <div class="d-flex mb-3">
-                  <img src="images/dripper.png" class="product-image rounded me-3" alt="Dripper">
-                  <div>
-                    <h6 class="mb-1">Dripper de Cerámica</h6>
-                    <p class="text-muted mb-0 small">Accesorios</p>
-                    <p class="mb-0">$38.000 x 1 = $38.000</p>
-                  </div>
-                </div>
-                
-                <!-- Producto 3 -->
-                <div class="d-flex">
-                  <img src="images/filtropapel.png" class="product-image rounded me-3" alt="Filtros">
-                  <div>
-                    <h6 class="mb-1">Filtros de Papel Premium</h6>
-                    <p class="text-muted mb-0 small">Accesorios, 100 unidades</p>
-                    <p class="mb-0">$12.000 x 1 = $12.000</p>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="col-md-4">
-                <div class="order-summary p-3">
-                  <h6 class="mb-3">Resumen</h6>
-                  
-                  <div class="d-flex justify-content-between mb-2">
-                    <span>Subtotal</span>
-                    <span>$75.000</span>
-                  </div>
-                  
-                  <div class="d-flex justify-content-between mb-2">
-                    <span>Envío</span>
-                    <span>$8.000</span>
-                  </div>
-                  
-                  <div class="d-flex justify-content-between mb-2">
-                    <span>Impuestos</span>
-                    <span>$0</span>
-                  </div>
-                  
-                  <hr>
-                  
-                  <div class="d-flex justify-content-between mb-0">
-                    <span class="fw-bold">Total</span>
-                    <span class="fw-bold">$83.000</span>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <h5 class="mb-3">Seguimiento del Pedido</h5>
-        
-        <div class="card border mb-4">
-          <div class="card-body">
-            <div class="tracking-step d-flex">
-              <div class="step-icon active">
-                <i class="bi bi-check"></i>
-              </div>
-              <div>
-                <h6 class="mb-1">Pedido Realizado</h6>
-                <p class="text-muted mb-1">15/03/2025, 9:30 AM</p>
-                <p class="mb-0 small">Tu pedido ha sido recibido y está siendo procesado.</p>
-              </div>
-            </div>
-            
-            <div class="tracking-step d-flex">
-              <div class="step-icon active">
-                <i class="bi bi-check"></i>
-              </div>
-              <div>
-                <h6 class="mb-1">Pago Confirmado</h6>
-                <p class="text-muted mb-1">15/03/2025, 9:35 AM</p>
-                <p class="mb-0 small">El pago de tu pedido ha sido confirmado correctamente.</p>
-              </div>
-            </div>
-            
-            <div class="tracking-step d-flex">
-              <div class="step-icon active">
-                <i class="bi bi-check"></i>
-              </div>
-              <div>
-                <h6 class="mb-1">En Preparación</h6>
-                <p class="text-muted mb-1">15/03/2025, 2:45 PM</p>
-                <p class="mb-0 small">Estamos preparando tu pedido para el envío.</p>
-              </div>
-            </div>
-            
-            <div class="tracking-step d-flex">
-              <div class="step-icon active">
-                <i class="bi bi-check"></i>
-              </div>
-              <div>
-                <h6 class="mb-1">Enviado</h6>
-                <p class="text-muted mb-1">16/03/2025, 11:20 AM</p>
-                <p class="mb-0 small">Tu pedido ha sido enviado. Número de seguimiento: TRK123456789.</p>
-              </div>
-            </div>
-            
-            <div class="tracking-step d-flex">
-              <div class="step-icon active">
-                <i class="bi bi-check"></i>
-              </div>
-              <div>
-                <h6 class="mb-1">Entregado</h6>
-                <p class="text-muted mb-1">20/03/2025, 3:15 PM</p>
-                <p class="mb-0 small">Tu pedido ha sido entregado correctamente.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <h5 class="mb-3">Escribe una reseña</h5>
-        
-        <div class="card border mb-4">
-          <div class="card-body">
-            <p>¿Qué te parecieron los productos? Tu opinión nos ayuda a mejorar.</p>
-            
-            <div class="row">
-              <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                  <div class="card-body text-center">
-                    <img src="images/cafepremium.png" class="product-image rounded mx-auto mb-3" alt="Café Colombiano">
-                    <h6>Café Colombiano Premium</h6>
-                    <div class="review-stars">
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                    </div>
-                    <button class="btn btn-sm btn-outline-primary mt-2">Escribir reseña</button>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                  <div class="card-body text-center">
-                    <img src="images/dripper.png" class="product-image rounded mx-auto mb-3" alt="Dripper">
-                    <h6>Dripper de Cerámica</h6>
-                    <div class="review-stars">
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                    </div>
-                    <button class="btn btn-sm btn-outline-primary mt-2">Escribir reseña</button>
-                  </div>
-                </div>
-              </div>
-              
-              <div class="col-md-4 mb-3">
-                <div class="card h-100">
-                  <div class="card-body text-center">
-                    <img src="images/filtropapel.png" class="product-image rounded mx-auto mb-3" alt="Filtros">
-                    <h6>Filtros de Papel Premium</h6>
-                    <div class="review-stars">
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                      <i class="bi bi-star"></i>
-                    </div>
-                    <button class="btn btn-sm btn-outline-primary mt-2">Escribir reseña</button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        
-        <div class="d-flex justify-content-between">
-          <a href="historialOrdenes.html" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Volver a mis pedidos</a>
-          <div>
-            <button class="btn btn-outline-primary me-2"><i class="bi bi-printer"></i> Imprimir pedido</button>
-            <a href="carritoCompra.html" class="btn btn-primary">Comprar de nuevo</a>
-          </div>
-        </div>
+      <!-- Loading -->
+      <div id="loadingDetalle" class="text-center py-5">
+        <div class="spinner-border text-primary" role="status"></div>
+        <p class="mt-2 text-muted">Cargando detalles del pedido...</p>
       </div>
+      
+      <!-- Contenido del pedido -->
+      <div id="detalleContenido" class="profile-content p-4 d-none"></div>
     </div>
   </div>
 </div>
 
-<!-- Footer -->
 <?php include 'includes/footer.php'; ?>
 
-<script src="script.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+const basePath = window.location.pathname.substring(0, window.location.pathname.lastIndexOf('/') + 1);
+const pedidoId = <?php echo $pedidoId; ?>;
+
+function formatPrice(price) {
+  return '$' + Number(price).toLocaleString('es-CO');
+}
+
+function formatDate(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' });
+}
+
+function formatDateTime(dateString) {
+  const date = new Date(dateString);
+  return date.toLocaleDateString('es-CO', { day: '2-digit', month: '2-digit', year: 'numeric' }) + ', ' +
+         date.toLocaleTimeString('es-CO', { hour: '2-digit', minute: '2-digit' });
+}
+
+function getEstadoTexto(estado) {
+  const estados = {
+    'pendiente': 'Pendiente',
+    'confirmado': 'Confirmado',
+    'en_proceso': 'En Proceso',
+    'enviado': 'Enviado',
+    'entregado': 'Entregado',
+    'cancelado': 'Cancelado'
+  };
+  return estados[estado] || estado;
+}
+
+async function cargarDetallePedido() {
+  try {
+    const response = await fetch(basePath + `php/pedidos_api.php?action=get&id=${pedidoId}`);
+    const data = await response.json();
+    
+    document.getElementById('loadingDetalle').classList.add('d-none');
+    
+    if (data.success && data.pedido) {
+      renderDetalle(data.pedido);
+      document.getElementById('detalleContenido').classList.remove('d-none');
+    } else {
+      alert('Pedido no encontrado');
+      window.location.href = 'historialOrdenes.php';
+    }
+  } catch (e) {
+    console.error('Error al cargar pedido:', e);
+    alert('Error al cargar el pedido');
+    window.location.href = 'historialOrdenes.php';
+  }
+}
+
+function renderDetalle(pedido) {
+  document.getElementById('breadcrumbPedido').textContent = 'Pedido #' + pedido.numeroSeguimiento;
+  
+  let productosHTML = '';
+  pedido.items.forEach(item => {
+    const imgSrc = item.imagen || 'images/placeholder.png';
+    productosHTML += `
+      <div class="d-flex mb-3">
+        <img src="${imgSrc}" class="product-image rounded me-3" alt="${item.nombre}" onerror="this.src='images/placeholder.png'">
+        <div class="flex-grow-1">
+          <h6 class="mb-1">${item.nombre}</h6>
+          <p class="text-muted mb-0 small">${item.descripcion ? item.descripcion.substring(0, 60) + '...' : ''}</p>
+          <p class="mb-0">${formatPrice(item.precioUnitario)} x ${item.cantidad} = ${formatPrice(item.subtotal)}</p>
+        </div>
+      </div>`;
+  });
+  
+  const container = document.getElementById('detalleContenido');
+  container.innerHTML = `
+    <div class="d-flex justify-content-between align-items-center mb-4">
+      <h2 class="coffee-title mb-0">Pedido #${pedido.numeroSeguimiento}</h2>
+      <span class="status-badge status-${pedido.estado}">${getEstadoTexto(pedido.estado)}</span>
+    </div>
+    
+    <div class="row mb-4">
+      <div class="col-md-6 mb-3 mb-md-0">
+        <h5>Información del Pedido</h5>
+        <table class="table table-borderless">
+          <tbody>
+            <tr>
+              <th scope="row" class="ps-0">Número de pedido:</th>
+              <td>${pedido.numeroSeguimiento}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="ps-0">Fecha de pedido:</th>
+              <td>${formatDate(pedido.fechaCreacion)}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="ps-0">Método de pago:</th>
+              <td>${pedido.metodoPagoTipo || 'No especificado'}</td>
+            </tr>
+            <tr>
+              <th scope="row" class="ps-0">Fecha estimada de entrega:</th>
+              <td>${formatDate(pedido.fecha_entrega_estimada)}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      
+      <div class="col-md-6">
+        <h5>Dirección de Envío</h5>
+        <address>
+          ${pedido.usuarioNombre}<br>
+          ${pedido.calle}${pedido.apartamento ? ', ' + pedido.apartamento : ''}<br>
+          ${pedido.ciudad}, ${pedido.departamento}<br>
+          Código Postal: ${pedido.codigoPostal}<br>
+          ${pedido.usuarioTelefono ? 'Teléfono: ' + pedido.usuarioTelefono : ''}
+          ${pedido.instrucciones ? '<br><small class="text-muted">Instrucciones: ' + pedido.instrucciones + '</small>' : ''}
+        </address>
+      </div>
+    </div>
+    
+    <hr class="my-4">
+    
+    <h5 class="mb-3">Productos</h5>
+    
+    <div class="card border mb-4">
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-8 mb-3 mb-md-0">
+            ${productosHTML}
+          </div>
+          
+          <div class="col-md-4">
+            <div class="order-summary p-3">
+              <h6 class="mb-3">Resumen</h6>
+              
+              <div class="d-flex justify-content-between mb-2">
+                <span>Subtotal</span>
+                <span>${formatPrice(pedido.subtotal)}</span>
+              </div>
+              
+              <div class="d-flex justify-content-between mb-2">
+                <span>Envío</span>
+                <span>${pedido.costoEnvio > 0 ? formatPrice(pedido.costoEnvio) : 'Gratis'}</span>
+              </div>
+              
+              <hr>
+              
+              <div class="d-flex justify-content-between mb-0">
+                <span class="fw-bold">Total</span>
+                <span class="fw-bold">${formatPrice(pedido.total)}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <h5 class="mb-3">Seguimiento del Pedido</h5>
+    
+    <div class="card border mb-4">
+      <div class="card-body">
+        ${generarSeguimiento(pedido.estado, pedido.fechaCreacion)}
+      </div>
+    </div>
+    
+    <div class="d-flex justify-content-between">
+      <a href="historialOrdenes.php" class="btn btn-outline-secondary"><i class="bi bi-arrow-left"></i> Volver a mis pedidos</a>
+      <div>
+        ${pedido.estado === 'pendiente' ? '<button class="btn btn-outline-danger me-2" onclick="cancelarPedido()"><i class="bi bi-x-circle"></i> Cancelar pedido</button>' : ''}
+        <button class="btn btn-primary" onclick="window.print()"><i class="bi bi-printer"></i> Imprimir</button>
+      </div>
+    </div>`;
+}
+
+function generarSeguimiento(estado, fechaCreacion) {
+  const fecha = new Date(fechaCreacion);
+  
+  const pasos = [
+    { id: 'pendiente', titulo: 'Pedido Realizado', activo: true, fecha: fechaCreacion },
+    { id: 'confirmado', titulo: 'Pago Confirmado', activo: false },
+    { id: 'en_proceso', titulo: 'En Preparación', activo: false },
+    { id: 'enviado', titulo: 'Enviado', activo: false },
+    { id: 'entregado', titulo: 'Entregado', activo: false }
+  ];
+  
+  // Activar pasos según el estado actual
+  const estadoIndex = pasos.findIndex(p => p.id === estado);
+  if (estadoIndex >= 0) {
+    for (let i = 0; i <= estadoIndex; i++) {
+      pasos[i].activo = true;
+    }
+  }
+  
+  let html = '';
+  pasos.forEach(paso => {
+    html += `
+      <div class="tracking-step d-flex">
+        <div class="step-icon ${paso.activo ? 'active' : ''}">
+          ${paso.activo ? '<i class="bi bi-check"></i>' : '<i class="bi bi-circle"></i>'}
+        </div>
+        <div>
+          <h6 class="mb-1">${paso.titulo}</h6>
+          ${paso.activo && paso.fecha ? '<p class="text-muted mb-1">' + formatDateTime(paso.fecha) + '</p>' : ''}
+        </div>
+      </div>`;
+  });
+  
+  return html;
+}
+
+async function cancelarPedido() {
+  if (!confirm('¿Estás seguro de que deseas cancelar este pedido?')) return;
+  
+  try {
+    const formData = new FormData();
+    formData.append('action', 'cancel');
+    formData.append('id', pedidoId);
+    
+    const response = await fetch(basePath + 'php/pedidos_api.php', {
+      method: 'POST',
+      body: formData
+    });
+    const data = await response.json();
+    
+    if (data.success) {
+      alert('Pedido cancelado exitosamente');
+      window.location.reload();
+    } else {
+      alert('Error: ' + data.message);
+    }
+  } catch (e) {
+    alert('Error al cancelar el pedido');
+  }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+  cargarDetallePedido();
+});
+</script>
 </body>
 </html>
-
